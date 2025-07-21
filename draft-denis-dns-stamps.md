@@ -283,6 +283,7 @@ payload = 0x03 || props || LP(addr) || VLP(hash1, ..., hashn) ||
 : Protocol identifier for DNS-over-TLS.
 
 Other fields have the same meaning as DoH stamps, except:
+
 - Default port is 853.
 - No path field is included.
 
@@ -438,6 +439,7 @@ Implementations SHOULD provide descriptive error messages indicating the specifi
 Hostnames in DNS stamps MUST be represented in their Unicode form within the stamp payload. Implementations MUST NOT apply punycode encoding before storing hostnames in stamps. When using the hostname for actual DNS queries or TLS connections, implementations MUST apply the appropriate encoding for the protocol being used.
 
 This approach:
+
 - Preserves readability when stamps are decoded for display
 - Avoids double-encoding issues
 - Allows implementations to apply protocol-specific encoding rules
@@ -457,6 +459,7 @@ DNS stamps contain security-critical configuration including server addresses, c
 ### Mitigations
 
 Implementations SHOULD:
+
 - Obtain stamps over authenticated channels (HTTPS with certificate validation)
 - Verify stamps against known-good values when available
 - Warn users when importing stamps from untrusted sources
@@ -469,6 +472,7 @@ For protocols using TLS (DoH, DoT, DoQ), stamps may include SHA256 hashes of cer
 ### Security Requirements
 
 Implementations MUST:
+
 - Verify at least one certificate in the chain matches a provided hash
 - Follow standard certificate validation per {{RFC5280}}
 - Check certificate validity periods and signatures
@@ -477,6 +481,7 @@ Implementations MUST:
 ### Operational Considerations
 
 Implementations SHOULD:
+
 - Support multiple certificate hashes to enable rotation
 - Provide clear errors for validation failures
 - Allow optional fallback to standard WebPKI validation
@@ -525,16 +530,19 @@ If a secure connection fails, the implementation SHOULD report the error rather 
 DNS stamp support can be integrated at various levels:
 
 ### Operating System Level
+
 - System resolver configuration
 - Network configuration tools
 - VPN client integration
 
 ### Application Level
+
 - Web browsers
 - DNS proxy software
 - Network diagnostic tools
 
 ### Library Level
+
 - DNS client libraries
 - HTTP client libraries
 - Security frameworks
@@ -559,6 +567,7 @@ Implementations SHOULD cache:
 ## User Interface Considerations
 
 Applications SHOULD:
+
 - Display decoded stamp contents clearly
 - Allow copying stamps to clipboard
 - Support QR code generation/scanning
@@ -568,6 +577,7 @@ Applications SHOULD:
 ## Debugging Support
 
 Implementations SHOULD provide:
+
 - Detailed logging of stamp parsing
 - Connection attempt diagnostics
 - Certificate validation details
@@ -583,44 +593,8 @@ IANA is requested to register the "sdns" URI scheme in the "Uniform Resource Ide
 - **Scheme name**: sdns
 - **Status**: Permanent
 - **Applications/protocols**: DNS client applications using DNS Stamps
-- **Contact**: Frank Denis <fde@00f.net>
-- **Change controller**: IETF
 - **References**: This document
-
-## DNS Stamps Protocol Identifiers Registry
-
-IANA is requested to create a new registry titled "DNS Stamps Protocol Identifiers" with the following registration procedure: Specification Required {{!RFC8126}}.
-
-Initial values:
-
-| Value     | Protocol                  | Reference     |
-| --------- | ------------------------- | ------------- |
-| 0x00      | Plain DNS                 | This document |
-| 0x01      | DNSCrypt                  | This document |
-| 0x02      | DNS-over-HTTPS            | This document |
-| 0x03      | DNS-over-TLS              | This document |
-| 0x04      | DNS-over-QUIC             | This document |
-| 0x05      | Oblivious DoH Target      | This document |
-| 0x06-0x7F | Unassigned                |               |
-| 0x80      | Reserved                  | This document |
-| 0x81      | Anonymized DNSCrypt Relay | This document |
-| 0x82-0x84 | Unassigned                |               |
-| 0x85      | Oblivious DoH Relay       | This document |
-| 0x86-0xFF | Unassigned                |               |
-
-## DNS Stamps Properties Registry
-
-IANA is requested to create a new registry titled "DNS Stamps Properties" with the following registration procedure: Specification Required {{!RFC8126}}.
-
-Initial values:
-
-| Bit  | Property   | Reference     |
-| ---- | ---------- | ------------- |
-| 0    | DNSSEC     | This document |
-| 1    | No Logs    | This document |
-| 2    | No Filter  | This document |
-| 3-63 | Unassigned |               |
-
+         |
 --- back
 
 # Complete Examples
@@ -630,6 +604,7 @@ This appendix provides complete examples of DNS stamp encoding with step-by-step
 ## Example 1: Plain DNS
 
 Configuration:
+
 - Server: 8.8.8.8
 - Port: 53 (default)
 - Properties: DNSSEC (bit 0 set)
@@ -646,6 +621,7 @@ Step-by-step encoding:
 ## Example 2: DNSCrypt
 
 Configuration:
+
 - Server: 185.121.177.177
 - Port: 5553
 - Provider public key: `e801...bf82` (32 bytes)
@@ -666,6 +642,7 @@ Step-by-step encoding:
 ## Example 3: DNS-over-HTTPS
 
 Configuration:
+
 - Hostname: cloudflare-dns.com
 - Path: /dns-query
 - No specific IP address
@@ -754,48 +731,8 @@ Decoded:
   Bootstrap 2: "203.0.113.1"
 ~~~
 
-# Implementation Status
-
-This section records the status of known implementations of DNS stamps.
-
-## dnscrypt-proxy
-
-- **Organization**: Frank Denis
-- **Description**: Flexible DNS proxy with comprehensive stamp support
-- **Maturity**: Production
-- **Coverage**: All stamp types
-- **License**: ISC
-- **URL**: https://github.com/dnscrypt/dnscrypt-proxy
-
-## AdGuard
-
-- **Organization**: AdGuard Software Limited
-- **Description**: DNS privacy protection software
-- **Maturity**: Production
-- **Coverage**: DNSCrypt, DoH, DoT, DoQ
-- **License**: Proprietary
-- **URL**: https://adguard.com
-
-## Simple DNSCrypt
-
-- **Organization**: Christian Hermann
-- **Description**: Windows GUI for dnscrypt-proxy
-- **Maturity**: Production
-- **Coverage**: All stamp types via dnscrypt-proxy
-- **License**: MIT
-- **URL**: https://simplednscrypt.org
-
-## YogaDNS
-
-- **Organization**: YogaDNS
-- **Description**: Advanced DNS client for Windows
-- **Maturity**: Production
-- **Coverage**: DNSCrypt, DoH, DoT
-- **License**: Proprietary
-- **URL**: https://yogadns.com
-
 # Acknowledgments
 
 The author would like to thank the DNSCrypt community for their extensive feedback and implementation experience. Special recognition goes to the developers of the various DNS stamp implementations who helped refine the format through practical deployment.
 
-Thanks also to the teams behind secure DNS protocols - DNSCrypt, DoH, DoT, and DoQ - whose work made DNS stamps both necessary and useful. Their efforts to improve DNS privacy and security provided the foundation for this specification.
+Thanks also to the teams behind secure DNS protocols - DNSCrypt, Anonymized DNSCrypt, DoH, DoT, and DoQ - whose work made DNS stamps both necessary and useful. Their efforts to improve DNS privacy and security provided the foundation for this specification.
