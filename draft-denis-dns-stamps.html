@@ -1081,6 +1081,17 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document specifies DNS Stamps, a compact format that encodes the information needed to connect to DNS resolvers. DNS Stamps encode all necessary parameters including addresses, hostnames, cryptographic keys, and protocol-specific configuration into a single string using a standard URI format. The specification supports multiple secure DNS protocols including DNSCrypt, DNS-over-HTTPS (DoH), DNS-over-TLS (DoT), DNS-over-QUIC (DoQ), and Oblivious DoH.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-discussion-venues">
+<a href="#name-discussion-venues" class="section-name selfRef">Discussion Venues</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">Discussion of this document takes place on the
+    Domain Name System Working Group mailing list (namedroppers@nic.ddn.mil),
+    which is archived at <span><a href="nicfs.nic.ddn.mil:~/namedroppers/*.Z">nicfs.nic.ddn.mil:~/namedroppers/*.Z</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">Source for this draft and an issue tracker can be found at
+    <span><a href="https://github.com/DNSCrypt/draft-denis-dns-stamps">https://github.com/DNSCrypt/draft-denis-dns-stamps</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+</section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
         <h2 id="name-status-of-this-memo">
@@ -1386,12 +1397,6 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
                 <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-dns-stamps-uri-scheme-regis" class="internal xref">DNS Stamps URI Scheme Registration</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-dns-stamps-protocol-identif" class="internal xref">DNS Stamps Protocol Identifiers Registry</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
-                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-dns-stamps-properties-regis" class="internal xref">DNS Stamps Properties Registry</a></p>
-</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
@@ -1434,27 +1439,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-C" class="auto internal xref">Appendix C</a>.  <a href="#name-implementation-status" class="internal xref">Implementation Status</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
-                <p id="section-toc.1-1.12.2.1.1"><a href="#appendix-C.1" class="auto internal xref">C.1</a>.  <a href="#name-dnscrypt-proxy" class="internal xref">dnscrypt-proxy</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
-                <p id="section-toc.1-1.12.2.2.1"><a href="#appendix-C.2" class="auto internal xref">C.2</a>.  <a href="#name-adguard" class="internal xref">AdGuard</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.3">
-                <p id="section-toc.1-1.12.2.3.1"><a href="#appendix-C.3" class="auto internal xref">C.3</a>.  <a href="#name-simple-dnscrypt" class="internal xref">Simple DNSCrypt</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.4">
-                <p id="section-toc.1-1.12.2.4.1"><a href="#appendix-C.4" class="auto internal xref">C.4</a>.  <a href="#name-yogadns" class="internal xref">YogaDNS</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.12.1"><a href="#appendix-C" class="auto internal xref">Appendix C</a>.  <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-D" class="auto internal xref">Appendix D</a>.  <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#appendix-E" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -1465,7 +1453,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">The Domain Name System (DNS) has evolved significantly from its original design as specified in <span>[<a href="#RFC1035" class="cite xref">RFC1035</a>]</span>. While traditional DNS operates over unencrypted UDP and TCP connections on port 53, modern DNS deployments increasingly use encrypted transports to provide confidentiality and integrity. These secure protocols include DNSCrypt <span>[<a href="#DNSCRYPT" class="cite xref">DNSCRYPT</a>]</span>, DNS-over-TLS (DoT) <span>[<a href="#RFC7858" class="cite xref">RFC7858</a>]</span>, DNS-over-HTTPS (DoH) <span>[<a href="#RFC8484" class="cite xref">RFC8484</a>]</span>, DNS-over-QUIC (DoQ) <span>[<a href="#RFC9250" class="cite xref">RFC9250</a>]</span>, and Oblivious DNS-over-HTTPS <span>[<a href="#ODOH" class="cite xref">ODOH</a>]</span>.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">The Domain Name System (DNS) has evolved significantly from its original design as specified in <span>[<a href="#RFC1035" class="cite xref">RFC1035</a>]</span>. While traditional DNS operates over unencrypted UDP and TCP connections on port <code>53</code>, modern DNS deployments increasingly use encrypted transports to provide confidentiality and integrity. These secure protocols include DNSCrypt <span>[<a href="#DNSCRYPT" class="cite xref">DNSCRYPT</a>]</span>, DNS-over-TLS (DoT) <span>[<a href="#RFC7858" class="cite xref">RFC7858</a>]</span>, DNS-over-HTTPS (DoH) <span>[<a href="#RFC8484" class="cite xref">RFC8484</a>]</span>, DNS-over-QUIC (DoQ) <span>[<a href="#RFC9250" class="cite xref">RFC9250</a>]</span>, and Oblivious DNS-over-HTTPS <span>[<a href="#ODOH" class="cite xref">ODOH</a>]</span>.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">Each secure DNS protocol requires different configuration parameters. DNSCrypt needs a provider public key and provider name in addition to server addresses. DoH requires HTTPS endpoints and paths. DoT and DoQ need TLS configuration including certificate validation parameters. This diversity in configuration requirements creates significant challenges for both users and applications attempting to configure secure DNS resolvers.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Current approaches to DNS configuration suffer from several limitations. Operating system interfaces typically support only IP addresses for DNS servers, providing no mechanism to specify encryption protocols or authentication parameters. Application-specific configuration files lack standardization, making it difficult to share configurations across different DNS client implementations. Manual configuration is error-prone, particularly when dealing with cryptographic parameters like public keys or certificate hashes. There is no standard way to distribute complete resolver configurations that would enable users to easily switch between different secure DNS providers.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">DNS Stamps address these challenges by encoding all parameters required to connect to a DNS resolver into a single, compact string using a URI format. This approach enables simple sharing of resolver configurations through copy-paste, QR codes, or URLs. It provides a consistent format across different client implementations, reduces configuration errors through format validation, and supports multiple protocols through a unified specification. DNS Stamps have been implemented in numerous DNS client applications and are used by several public DNS resolver operators to publish their server configurations.<a href="#section-1-4" class="pilcrow">¶</a></p>
@@ -1513,7 +1501,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
         </h3>
 <p id="section-2.2-1">The following encoding primitives are used throughout this specification:<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-2.2-2">
-          <dt id="section-2.2-2.1"><code>||</code></dt>
+          <dt id="section-2.2-2.1"><code>‖</code></dt>
           <dd style="margin-left: 1.5em" id="section-2.2-2.2">
             <p id="section-2.2-2.2.1">Denotes concatenation of byte sequences.<a href="#section-2.2-2.2.1" class="pilcrow">¶</a></p>
 </dd>
@@ -1535,12 +1523,12 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
           <dd class="break"></dd>
 <dt id="section-2.2-2.9"><code>LP(x)</code></dt>
           <dd style="margin-left: 1.5em" id="section-2.2-2.10">
-            <p id="section-2.2-2.10.1">Length-prefixed encoding, defined as <code>len(x) || x</code>.<a href="#section-2.2-2.10.1" class="pilcrow">¶</a></p>
+            <p id="section-2.2-2.10.1">Length-prefixed encoding, defined as <code>len(x) ‖ x</code>.<a href="#section-2.2-2.10.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-2.2-2.11"><code>VLP(x1, x2, ...xn)</code></dt>
           <dd style="margin-left: 1.5em" id="section-2.2-2.12">
-            <p id="section-2.2-2.12.1">Variable-length-prefixed set encoding, defined as <code>vlen(x1) || x1 || vlen(x2) || x2 ... || vlen(xn) || xn</code>. For a single-element set, <code>VLP(x) == LP(x)</code>.<a href="#section-2.2-2.12.1" class="pilcrow">¶</a></p>
+            <p id="section-2.2-2.12.1">Variable-length-prefixed set encoding, defined as <code>vlen(x1) ‖ x1 ‖ vlen(x2) ‖ x2 ... ‖ vlen(xn) ‖ xn</code>. For a single-element set, <code>VLP(x) == LP(x)</code>.<a href="#section-2.2-2.12.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-2.2-2.13"><code>[x]</code></dt>
@@ -1586,7 +1574,7 @@ sdns://base64url(payload)
 <p id="section-3.2-1">The general structure of the payload is:<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.2-2">
 <pre>
-protocol_identifier || protocol_specific_data
+protocol_identifier ‖ protocol_specific_data
 </pre><a href="#section-3.2-2" class="pilcrow">¶</a>
 </div>
 <p id="section-3.2-3">The payload always begins with a single-byte protocol identifier that determines how to interpret the remaining bytes. The base64url encoding is applied to the entire payload as a single operation after concatenating all components.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
@@ -1715,7 +1703,7 @@ protocol_identifier || protocol_specific_data
           </h4>
 <div class="alignLeft art-text artwork" id="section-4.1.1-1">
 <pre>
-payload = 0x00 || props || LP(addr)
+payload = 0x00 ‖ props ‖ LP(addr)
 </pre><a href="#section-4.1.1-1" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1738,7 +1726,7 @@ payload = 0x00 || props || LP(addr)
             <dd class="break"></dd>
 <dt id="section-4.1.2-1.5"><code>addr</code></dt>
             <dd style="margin-left: 1.5em" id="section-4.1.2-1.6">
-              <p id="section-4.1.2-1.6.1">IP address and optional port as a string. IPv6 addresses <span class="bcp14">MUST</span> be enclosed in square brackets. Default port is 53.<a href="#section-4.1.2-1.6.1" class="pilcrow">¶</a></p>
+              <p id="section-4.1.2-1.6.1">IP address and optional port as a string. IPv6 addresses <span class="bcp14">MUST</span> be enclosed in square brackets. Default port is <code>53</code>.<a href="#section-4.1.2-1.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 </dl>
@@ -1751,10 +1739,10 @@ payload = 0x00 || props || LP(addr)
           </h4>
 <ul class="normal">
 <li class="normal" id="section-4.1.3-1.1">
-              <p id="section-4.1.3-1.1.1">IPv4: <code>"192.0.2.1"</code> or <code>"192.0.2.1:5353"</code><a href="#section-4.1.3-1.1.1" class="pilcrow">¶</a></p>
+              <p id="section-4.1.3-1.1.1">IPv4: <code>192.0.2.1</code> or <code>192.0.2.1:5353</code><a href="#section-4.1.3-1.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-4.1.3-1.2">
-              <p id="section-4.1.3-1.2.1">IPv6: <code>"[2001:db8::1]"</code> or <code>"[2001:db8::1]:5353"</code><a href="#section-4.1.3-1.2.1" class="pilcrow">¶</a></p>
+              <p id="section-4.1.3-1.2.1">IPv6: <code>[2001:db8::1]</code> or <code>[2001:db8::1]:5353</code><a href="#section-4.1.3-1.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1774,7 +1762,7 @@ payload = 0x00 || props || LP(addr)
           </h4>
 <div class="alignLeft art-text artwork" id="section-4.2.1-1">
 <pre>
-payload = 0x01 || props || LP(addr) || LP(pk) || LP(provider_name)
+payload = 0x01 ‖ props ‖ LP(addr) ‖ LP(pk) ‖ LP(provider_name)
 </pre><a href="#section-4.2.1-1" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1797,7 +1785,7 @@ payload = 0x01 || props || LP(addr) || LP(pk) || LP(provider_name)
             <dd class="break"></dd>
 <dt id="section-4.2.2-1.5"><code>addr</code></dt>
             <dd style="margin-left: 1.5em" id="section-4.2.2-1.6">
-              <p id="section-4.2.2-1.6.1">IP address and optional port. IPv6 addresses <span class="bcp14">MUST</span> be enclosed in square brackets. Default port is 443.<a href="#section-4.2.2-1.6.1" class="pilcrow">¶</a></p>
+              <p id="section-4.2.2-1.6.1">IP address and optional port. IPv6 addresses <span class="bcp14">MUST</span> be enclosed in square brackets. Default port is <code>443</code>.<a href="#section-4.2.2-1.6.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-4.2.2-1.7"><code>pk</code></dt>
@@ -1807,7 +1795,7 @@ payload = 0x01 || props || LP(addr) || LP(pk) || LP(provider_name)
             <dd class="break"></dd>
 <dt id="section-4.2.2-1.9"><code>provider_name</code></dt>
             <dd style="margin-left: 1.5em" id="section-4.2.2-1.10">
-              <p id="section-4.2.2-1.10.1">DNSCrypt provider name (e.g., <code>"2.dnscrypt-cert.example.com"</code>).<a href="#section-4.2.2-1.10.1" class="pilcrow">¶</a></p>
+              <p id="section-4.2.2-1.10.1">DNSCrypt provider name (e.g., <code>2.dnscrypt-cert.example.com</code>).<a href="#section-4.2.2-1.10.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 </dl>
@@ -1846,8 +1834,8 @@ payload = 0x01 || props || LP(addr) || LP(pk) || LP(provider_name)
           </h4>
 <div class="alignLeft art-text artwork" id="section-4.3.1-1">
 <pre>
-payload = 0x02 || props || LP(addr) || VLP(hash1, ..., hashn) ||
-          LP(hostname) || LP(path) [ || VLP(bootstrap1, ..., bootstrapn) ]
+payload = 0x02 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
+          LP(hostname) ‖ LP(path) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 </pre><a href="#section-4.3.1-1" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1880,12 +1868,12 @@ payload = 0x02 || props || LP(addr) || VLP(hash1, ..., hashn) ||
             <dd class="break"></dd>
 <dt id="section-4.3.2-1.9"><code>hostname</code></dt>
             <dd style="margin-left: 1.5em" id="section-4.3.2-1.10">
-              <p id="section-4.3.2-1.10.1">Server hostname with optional port. Default port is 443.<a href="#section-4.3.2-1.10.1" class="pilcrow">¶</a></p>
+              <p id="section-4.3.2-1.10.1">Server hostname with optional port. Default port is <code>443</code>.<a href="#section-4.3.2-1.10.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-4.3.2-1.11"><code>path</code></dt>
             <dd style="margin-left: 1.5em" id="section-4.3.2-1.12">
-              <p id="section-4.3.2-1.12.1">Absolute URI path (e.g., <code>"/dns-query"</code>).<a href="#section-4.3.2-1.12.1" class="pilcrow">¶</a></p>
+              <p id="section-4.3.2-1.12.1">Absolute URI path (e.g., <code>/dns-query</code>).<a href="#section-4.3.2-1.12.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-4.3.2-1.13"><code>bootstrapi</code></dt>
@@ -1932,8 +1920,8 @@ payload = 0x02 || props || LP(addr) || VLP(hash1, ..., hashn) ||
           </h4>
 <div class="alignLeft art-text artwork" id="section-4.4.1-1">
 <pre>
-payload = 0x03 || props || LP(addr) || VLP(hash1, ..., hashn) ||
-          LP(hostname) [ || VLP(bootstrap1, ..., bootstrapn) ]
+payload = 0x03 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
+          LP(hostname) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 </pre><a href="#section-4.4.1-1" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1950,9 +1938,15 @@ payload = 0x03 || props || LP(addr) || VLP(hash1, ..., hashn) ||
 </dd>
           <dd class="break"></dd>
 </dl>
-<p id="section-4.4.2-2">Other fields have the same meaning as DoH stamps, except:
-- Default port is 853.
-- No path field is included.<a href="#section-4.4.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.4.2-2">Other fields have the same meaning as DoH stamps, except:<a href="#section-4.4.2-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.4.2-3.1">
+              <p id="section-4.4.2-3.1.1">Default port is <code>853</code>.<a href="#section-4.4.2-3.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-4.4.2-3.2">
+              <p id="section-4.4.2-3.2.1">No path field is included.<a href="#section-4.4.2-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
 </section>
 </div>
 </section>
@@ -1970,8 +1964,8 @@ payload = 0x03 || props || LP(addr) || VLP(hash1, ..., hashn) ||
           </h4>
 <div class="alignLeft art-text artwork" id="section-4.5.1-1">
 <pre>
-payload = 0x04 || props || LP(addr) || VLP(hash1, ..., hashn) ||
-          LP(hostname) [ || VLP(bootstrap1, ..., bootstrapn) ]
+payload = 0x04 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
+          LP(hostname) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 </pre><a href="#section-4.5.1-1" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2006,7 +2000,7 @@ payload = 0x04 || props || LP(addr) || VLP(hash1, ..., hashn) ||
           </h4>
 <div class="alignLeft art-text artwork" id="section-4.6.1-1">
 <pre>
-payload = 0x05 || props || LP(hostname) || LP(path)
+payload = 0x05 ‖ props ‖ LP(hostname) ‖ LP(path)
 </pre><a href="#section-4.6.1-1" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2029,7 +2023,7 @@ payload = 0x05 || props || LP(hostname) || LP(path)
             <dd class="break"></dd>
 <dt id="section-4.6.2-1.5"><code>hostname</code></dt>
             <dd style="margin-left: 1.5em" id="section-4.6.2-1.6">
-              <p id="section-4.6.2-1.6.1">Server hostname with optional port. Default port is 443.<a href="#section-4.6.2-1.6.1" class="pilcrow">¶</a></p>
+              <p id="section-4.6.2-1.6.1">Server hostname with optional port. Default port is <code>443</code>.<a href="#section-4.6.2-1.6.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
 <dt id="section-4.6.2-1.7"><code>path</code></dt>
@@ -2055,7 +2049,7 @@ payload = 0x05 || props || LP(hostname) || LP(path)
           </h4>
 <div class="alignLeft art-text artwork" id="section-4.7.1-1">
 <pre>
-payload = 0x81 || LP(addr)
+payload = 0x81 ‖ LP(addr)
 </pre><a href="#section-4.7.1-1" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2094,8 +2088,8 @@ payload = 0x81 || LP(addr)
           </h4>
 <div class="alignLeft art-text artwork" id="section-4.8.1-1">
 <pre>
-payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
-          LP(hostname) || LP(path) [ || VLP(bootstrap1, ..., bootstrapn) ]
+payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
+          LP(hostname) ‖ LP(path) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 </pre><a href="#section-4.8.1-1" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2268,10 +2262,10 @@ payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
               <p id="section-5.3.2-1.2.1">Hostnames <span class="bcp14">MUST</span> be valid DNS names.<a href="#section-5.3.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.3.2-1.3">
-              <p id="section-5.3.2-1.3.1">Ports <span class="bcp14">MUST</span> be in the range 1-65535.<a href="#section-5.3.2-1.3.1" class="pilcrow">¶</a></p>
+              <p id="section-5.3.2-1.3.1">Ports <span class="bcp14">MUST</span> be in the range <code>1-65535</code>.<a href="#section-5.3.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.3.2-1.4">
-              <p id="section-5.3.2-1.4.1">Paths <span class="bcp14">MUST</span> begin with “/”.<a href="#section-5.3.2-1.4.1" class="pilcrow">¶</a></p>
+              <p id="section-5.3.2-1.4.1">Paths <span class="bcp14">MUST</span> begin with <code>/</code>.<a href="#section-5.3.2-1.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -2302,10 +2296,18 @@ payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
 <a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-internationalization" class="section-name selfRef">Internationalization</a>
         </h3>
 <p id="section-5.4-1">Hostnames in DNS stamps <span class="bcp14">MUST</span> be represented in their Unicode form within the stamp payload. Implementations <span class="bcp14">MUST NOT</span> apply punycode encoding before storing hostnames in stamps. When using the hostname for actual DNS queries or TLS connections, implementations <span class="bcp14">MUST</span> apply the appropriate encoding for the protocol being used.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.4-2">This approach:
-- Preserves readability when stamps are decoded for display
-- Avoids double-encoding issues
-- Allows implementations to apply protocol-specific encoding rules<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.4-2">This approach:<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.4-3.1">
+            <p id="section-5.4-3.1.1">Preserves readability when stamps are decoded for display<a href="#section-5.4-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.4-3.2">
+            <p id="section-5.4-3.2.1">Avoids double-encoding issues<a href="#section-5.4-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.4-3.3">
+            <p id="section-5.4-3.3.1">Allows implementations to apply protocol-specific encoding rules<a href="#section-5.4-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 </section>
@@ -2344,11 +2346,21 @@ payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
           <h4 id="name-mitigations">
 <a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-mitigations" class="section-name selfRef">Mitigations</a>
           </h4>
-<p id="section-6.1.2-1">Implementations <span class="bcp14">SHOULD</span>:
-- Obtain stamps over authenticated channels (HTTPS with certificate validation)
-- Verify stamps against known-good values when available
-- Warn users when importing stamps from untrusted sources
-- Validate all cryptographic parameters before use<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-1">Implementations <span class="bcp14">SHOULD</span>:<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.1.2-2.1">
+              <p id="section-6.1.2-2.1.1">Obtain stamps over authenticated channels (HTTPS with certificate validation)<a href="#section-6.1.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.2-2.2">
+              <p id="section-6.1.2-2.2.1">Verify stamps against known-good values when available<a href="#section-6.1.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.2-2.3">
+              <p id="section-6.1.2-2.3.1">Warn users when importing stamps from untrusted sources<a href="#section-6.1.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.2-2.4">
+              <p id="section-6.1.2-2.4.1">Validate all cryptographic parameters before use<a href="#section-6.1.2-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
 </section>
 </div>
 </section>
@@ -2364,11 +2376,21 @@ payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
           <h4 id="name-security-requirements">
 <a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-security-requirements" class="section-name selfRef">Security Requirements</a>
           </h4>
-<p id="section-6.2.1-1">Implementations <span class="bcp14">MUST</span>:
-- Verify at least one certificate in the chain matches a provided hash
-- Follow standard certificate validation per <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>
-- Check certificate validity periods and signatures
-- Verify the certificate matches the specified hostname<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-1">Implementations <span class="bcp14">MUST</span>:<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.2.1-2.1">
+              <p id="section-6.2.1-2.1.1">Verify at least one certificate in the chain matches a provided hash<a href="#section-6.2.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.2.1-2.2">
+              <p id="section-6.2.1-2.2.1">Follow standard certificate validation per <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span><a href="#section-6.2.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.2.1-2.3">
+              <p id="section-6.2.1-2.3.1">Check certificate validity periods and signatures<a href="#section-6.2.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.2.1-2.4">
+              <p id="section-6.2.1-2.4.1">Verify the certificate matches the specified hostname<a href="#section-6.2.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
 </section>
 </div>
 <div id="operational-considerations">
@@ -2376,11 +2398,21 @@ payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
           <h4 id="name-operational-considerations">
 <a href="#section-6.2.2" class="section-number selfRef">6.2.2. </a><a href="#name-operational-considerations" class="section-name selfRef">Operational Considerations</a>
           </h4>
-<p id="section-6.2.2-1">Implementations <span class="bcp14">SHOULD</span>:
-- Support multiple certificate hashes to enable rotation
-- Provide clear errors for validation failures
-- Allow optional fallback to standard WebPKI validation
-- Cache certificate validation results appropriately<a href="#section-6.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.2-1">Implementations <span class="bcp14">SHOULD</span>:<a href="#section-6.2.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.2.2-2.1">
+              <p id="section-6.2.2-2.1.1">Support multiple certificate hashes to enable rotation<a href="#section-6.2.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.2.2-2.2">
+              <p id="section-6.2.2-2.2.1">Provide clear errors for validation failures<a href="#section-6.2.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.2.2-2.3">
+              <p id="section-6.2.2-2.3.1">Allow optional fallback to standard WebPKI validation<a href="#section-6.2.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.2.2-2.4">
+              <p id="section-6.2.2-2.4.1">Cache certificate validation results appropriately<a href="#section-6.2.2-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
 </section>
 </div>
 </section>
@@ -2583,12 +2615,24 @@ payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
         <h3 id="name-user-interface-consideratio">
 <a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-user-interface-consideratio" class="section-name selfRef">User Interface Considerations</a>
         </h3>
-<p id="section-7.3-1">Applications <span class="bcp14">SHOULD</span>:
-- Display decoded stamp contents clearly
-- Allow copying stamps to clipboard
-- Support QR code generation/scanning
-- Provide stamp validation feedback
-- Show security properties prominently<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-1">Applications <span class="bcp14">SHOULD</span>:<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.3-2.1">
+            <p id="section-7.3-2.1.1">Display decoded stamp contents clearly<a href="#section-7.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.3-2.2">
+            <p id="section-7.3-2.2.1">Allow copying stamps to clipboard<a href="#section-7.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.3-2.3">
+            <p id="section-7.3-2.3.1">Support QR code generation/scanning<a href="#section-7.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.3-2.4">
+            <p id="section-7.3-2.4.1">Provide stamp validation feedback<a href="#section-7.3-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.3-2.5">
+            <p id="section-7.3-2.5.1">Show security properties prominently<a href="#section-7.3-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 <div id="debugging-support">
@@ -2596,12 +2640,24 @@ payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
         <h3 id="name-debugging-support">
 <a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-debugging-support" class="section-name selfRef">Debugging Support</a>
         </h3>
-<p id="section-7.4-1">Implementations <span class="bcp14">SHOULD</span> provide:
-- Detailed logging of stamp parsing
-- Connection attempt diagnostics
-- Certificate validation details
-- Performance metrics
-- Error context for troubleshooting<a href="#section-7.4-1" class="pilcrow">¶</a></p>
+<p id="section-7.4-1">Implementations <span class="bcp14">SHOULD</span> provide:<a href="#section-7.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.4-2.1">
+            <p id="section-7.4-2.1.1">Detailed logging of stamp parsing<a href="#section-7.4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.4-2.2">
+            <p id="section-7.4-2.2.1">Connection attempt diagnostics<a href="#section-7.4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.4-2.3">
+            <p id="section-7.4-2.3.1">Certificate validation details<a href="#section-7.4-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.4-2.4">
+            <p id="section-7.4-2.4.1">Performance metrics<a href="#section-7.4-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.4-2.5">
+            <p id="section-7.4-2.5.1">Error context for troubleshooting<a href="#section-7.4-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 </section>
@@ -2628,137 +2684,10 @@ payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
             <p id="section-8.1-2.3.1"><strong>Applications/protocols</strong>: DNS client applications using DNS Stamps<a href="#section-8.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.1-2.4">
-            <p id="section-8.1-2.4.1"><strong>Contact</strong>: Frank Denis <a href="mailto:fde@00f.net">fde@00f.net</a><a href="#section-8.1-2.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-8.1-2.5">
-            <p id="section-8.1-2.5.1"><strong>Change controller</strong>: IETF<a href="#section-8.1-2.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-8.1-2.6">
-            <p id="section-8.1-2.6.1"><strong>References</strong>: This document<a href="#section-8.1-2.6.1" class="pilcrow">¶</a></p>
+            <p id="section-8.1-2.4.1"><strong>References</strong>: This document
+       |<a href="#section-8.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-</section>
-</div>
-<div id="dns-stamps-protocol-identifiers-registry">
-<section id="section-8.2">
-        <h3 id="name-dns-stamps-protocol-identif">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-dns-stamps-protocol-identif" class="section-name selfRef">DNS Stamps Protocol Identifiers Registry</a>
-        </h3>
-<p id="section-8.2-1">IANA is requested to create a new registry titled “DNS Stamps Protocol Identifiers” with the following registration procedure: Specification Required <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.2-2">Initial values:<a href="#section-8.2-2" class="pilcrow">¶</a></p>
-<table class="center" id="table-3">
-          <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
-<thead>
-            <tr>
-              <th class="text-left" rowspan="1" colspan="1">Value</th>
-              <th class="text-left" rowspan="1" colspan="1">Protocol</th>
-              <th class="text-left" rowspan="1" colspan="1">Reference</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">0x00</td>
-              <td class="text-left" rowspan="1" colspan="1">Plain DNS</td>
-              <td class="text-left" rowspan="1" colspan="1">This document</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">0x01</td>
-              <td class="text-left" rowspan="1" colspan="1">DNSCrypt</td>
-              <td class="text-left" rowspan="1" colspan="1">This document</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">0x02</td>
-              <td class="text-left" rowspan="1" colspan="1">DNS-over-HTTPS</td>
-              <td class="text-left" rowspan="1" colspan="1">This document</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">0x03</td>
-              <td class="text-left" rowspan="1" colspan="1">DNS-over-TLS</td>
-              <td class="text-left" rowspan="1" colspan="1">This document</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">0x04</td>
-              <td class="text-left" rowspan="1" colspan="1">DNS-over-QUIC</td>
-              <td class="text-left" rowspan="1" colspan="1">This document</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">0x05</td>
-              <td class="text-left" rowspan="1" colspan="1">Oblivious DoH Target</td>
-              <td class="text-left" rowspan="1" colspan="1">This document</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">0x06-0x7F</td>
-              <td class="text-left" rowspan="1" colspan="1">Unassigned</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">0x80</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved</td>
-              <td class="text-left" rowspan="1" colspan="1">This document</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">0x81</td>
-              <td class="text-left" rowspan="1" colspan="1">Anonymized DNSCrypt Relay</td>
-              <td class="text-left" rowspan="1" colspan="1">This document</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">0x82-0x84</td>
-              <td class="text-left" rowspan="1" colspan="1">Unassigned</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">0x85</td>
-              <td class="text-left" rowspan="1" colspan="1">Oblivious DoH Relay</td>
-              <td class="text-left" rowspan="1" colspan="1">This document</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">0x86-0xFF</td>
-              <td class="text-left" rowspan="1" colspan="1">Unassigned</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-            </tr>
-          </tbody>
-        </table>
-</section>
-</div>
-<div id="dns-stamps-properties-registry">
-<section id="section-8.3">
-        <h3 id="name-dns-stamps-properties-regis">
-<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-dns-stamps-properties-regis" class="section-name selfRef">DNS Stamps Properties Registry</a>
-        </h3>
-<p id="section-8.3-1">IANA is requested to create a new registry titled “DNS Stamps Properties” with the following registration procedure: Specification Required <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
-<p id="section-8.3-2">Initial values:<a href="#section-8.3-2" class="pilcrow">¶</a></p>
-<table class="center" id="table-4">
-          <caption><a href="#table-4" class="selfRef">Table 4</a></caption>
-<thead>
-            <tr>
-              <th class="text-left" rowspan="1" colspan="1">Bit</th>
-              <th class="text-left" rowspan="1" colspan="1">Property</th>
-              <th class="text-left" rowspan="1" colspan="1">Reference</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">0</td>
-              <td class="text-left" rowspan="1" colspan="1">DNSSEC</td>
-              <td class="text-left" rowspan="1" colspan="1">This document</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">1</td>
-              <td class="text-left" rowspan="1" colspan="1">No Logs</td>
-              <td class="text-left" rowspan="1" colspan="1">This document</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">2</td>
-              <td class="text-left" rowspan="1" colspan="1">No Filter</td>
-              <td class="text-left" rowspan="1" colspan="1">This document</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">3-63</td>
-              <td class="text-left" rowspan="1" colspan="1">Unassigned</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-            </tr>
-          </tbody>
-        </table>
 </section>
 </div>
 </section>
@@ -2801,10 +2730,6 @@ payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
 <dt id="RFC7858">[RFC7858]</dt>
         <dd>
 <span class="refAuthor">Hu, Z.</span>, <span class="refAuthor">Zhu, L.</span>, <span class="refAuthor">Heidemann, J.</span>, <span class="refAuthor">Mankin, A.</span>, <span class="refAuthor">Wessels, D.</span>, and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Specification for DNS over Transport Layer Security (TLS)"</span>, <span class="seriesInfo">RFC 7858</span>, <span class="seriesInfo">DOI 10.17487/RFC7858</span>, <time datetime="2016-05" class="refDate">May 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7858">https://www.rfc-editor.org/rfc/rfc7858</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC8126">[RFC8126]</dt>
-        <dd>
-<span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
@@ -2867,29 +2792,37 @@ payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
         <h3 id="name-example-1-plain-dns">
 <a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-example-1-plain-dns" class="section-name selfRef">Example 1: Plain DNS</a>
         </h3>
-<p id="appendix-A.1-1">Configuration:
-- Server: 8.8.8.8
-- Port: 53 (default)
-- Properties: DNSSEC (bit 0 set)<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
-<p id="appendix-A.1-2">Step-by-step encoding:<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="appendix-A.1-3">
-<li id="appendix-A.1-3.1">
-            <p id="appendix-A.1-3.1.1">Protocol identifier: <code>0x00</code><a href="#appendix-A.1-3.1.1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-1">Configuration:<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-A.1-2.1">
+            <p id="appendix-A.1-2.1.1">Server: <code>192.0.2.53</code><a href="#appendix-A.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.1-3.2">
-            <p id="appendix-A.1-3.2.1">Properties: <code>0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00</code> (bit 0 set, little-endian)<a href="#appendix-A.1-3.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-A.1-2.2">
+            <p id="appendix-A.1-2.2.1">Port: <code>53</code> (default)<a href="#appendix-A.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.1-3.3">
-            <p id="appendix-A.1-3.3.1">LP(“8.8.8.8”): <code>0x07</code> + <code>"8.8.8.8"</code> = <code>0x07 0x38 0x2E 0x38 0x2E 0x38 0x2E 0x38</code><a href="#appendix-A.1-3.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-A.1-2.3">
+            <p id="appendix-A.1-2.3.1">Properties: DNSSEC (bit 0 set)<a href="#appendix-A.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.1-3.4">
-            <p id="appendix-A.1-3.4.1">Concatenate: <code>0x00 0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x07 0x38 0x2E 0x38 0x2E 0x38 0x2E 0x38</code><a href="#appendix-A.1-3.4.1" class="pilcrow">¶</a></p>
+        </ul>
+<p id="appendix-A.1-3">Step-by-step encoding:<a href="#appendix-A.1-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="appendix-A.1-4">
+<li id="appendix-A.1-4.1">
+            <p id="appendix-A.1-4.1.1">Protocol identifier: <code>0x00</code><a href="#appendix-A.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.1-3.5">
-            <p id="appendix-A.1-3.5.1">Base64url encode: <code>AAEAAAAAAAAABzguOC44Ljg</code><a href="#appendix-A.1-3.5.1" class="pilcrow">¶</a></p>
+          <li id="appendix-A.1-4.2">
+            <p id="appendix-A.1-4.2.1">Properties: <code>0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00</code> (bit 0 set, little-endian)<a href="#appendix-A.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.1-3.6">
-            <p id="appendix-A.1-3.6.1">Final stamp: <code>sdns://AAEAAAAAAAAABzguOC44Ljg</code><a href="#appendix-A.1-3.6.1" class="pilcrow">¶</a></p>
+          <li id="appendix-A.1-4.3">
+            <p id="appendix-A.1-4.3.1">LP(“192.0.2.53”): 0x0A ‖ “192.0.2.53” = 0x0A 0x31 0x39 0x32 0x2E 0x30 0x2E 0x32 0x2E 0x35 0x33<a href="#appendix-A.1-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="appendix-A.1-4.4">
+            <p id="appendix-A.1-4.4.1">Concatenate: <code>0x00 0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x0A 0x31 0x39 0x32 0x2E 0x30 0x2E 0x32 0x2E 0x35 0x33</code><a href="#appendix-A.1-4.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="appendix-A.1-4.5">
+            <p id="appendix-A.1-4.5.1">Base64url encode: <code>AAEAAAAAAAAACjE5Mi4wLjIuNTM</code><a href="#appendix-A.1-4.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="appendix-A.1-4.6">
+            <p id="appendix-A.1-4.6.1">Final stamp: <code>sdns://AAEAAAAAAAAACjE5Mi4wLjIuNTM</code><a href="#appendix-A.1-4.6.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
@@ -2899,37 +2832,49 @@ payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
         <h3 id="name-example-2-dnscrypt">
 <a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-example-2-dnscrypt" class="section-name selfRef">Example 2: DNSCrypt</a>
         </h3>
-<p id="appendix-A.2-1">Configuration:
-- Server: 185.121.177.177
-- Port: 5553
-- Provider public key: <code>e801...bf82</code> (32 bytes)
-- Provider name: 2.dnscrypt-cert.scaleway-fr
-- Properties: DNSSEC, No logs, No filter (bits 0, 1, 2 set)<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
-<p id="appendix-A.2-2">Step-by-step encoding:<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="appendix-A.2-3">
-<li id="appendix-A.2-3.1">
-            <p id="appendix-A.2-3.1.1">Protocol identifier: <code>0x01</code><a href="#appendix-A.2-3.1.1" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-1">Configuration:<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-A.2-2.1">
+            <p id="appendix-A.2-2.1.1">Server: <code>198.51.100.1</code><a href="#appendix-A.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.2-3.2">
-            <p id="appendix-A.2-3.2.1">Properties: <code>0x07 0x00 0x00 0x00 0x00 0x00 0x00 0x00</code><a href="#appendix-A.2-3.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-A.2-2.2">
+            <p id="appendix-A.2-2.2.1">Port: <code>5553</code><a href="#appendix-A.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.2-3.3">
-            <p id="appendix-A.2-3.3.1">LP(“185.121.177.177:5553”): <code>0x14</code> + address<a href="#appendix-A.2-3.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-A.2-2.3">
+            <p id="appendix-A.2-2.3.1">Provider public key: <code>e801...bf82</code> (32 bytes)<a href="#appendix-A.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.2-3.4">
-            <p id="appendix-A.2-3.4.1">LP(public key): <code>0x20</code> + 32 bytes of key<a href="#appendix-A.2-3.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-A.2-2.4">
+            <p id="appendix-A.2-2.4.1">Provider name: <code>2.dnscrypt-cert.example.com</code><a href="#appendix-A.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.2-3.5">
-            <p id="appendix-A.2-3.5.1">LP(“2.dnscrypt-cert.scaleway-fr”): <code>0x1B</code> + provider name<a href="#appendix-A.2-3.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-A.2-2.5">
+            <p id="appendix-A.2-2.5.1">Properties: DNSSEC, No logs, No filter (bits 0, 1, 2 set)<a href="#appendix-A.2-2.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.2-3.6">
-            <p id="appendix-A.2-3.6.1">Concatenate all components<a href="#appendix-A.2-3.6.1" class="pilcrow">¶</a></p>
+        </ul>
+<p id="appendix-A.2-3">Step-by-step encoding:<a href="#appendix-A.2-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="appendix-A.2-4">
+<li id="appendix-A.2-4.1">
+            <p id="appendix-A.2-4.1.1">Protocol identifier: <code>0x01</code><a href="#appendix-A.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.2-3.7">
-            <p id="appendix-A.2-3.7.1">Base64url encode<a href="#appendix-A.2-3.7.1" class="pilcrow">¶</a></p>
+          <li id="appendix-A.2-4.2">
+            <p id="appendix-A.2-4.2.1">Properties: <code>0x07 0x00 0x00 0x00 0x00 0x00 0x00 0x00</code><a href="#appendix-A.2-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.2-3.8">
-            <p id="appendix-A.2-3.8.1">Final stamp: <code>sdns://AQcAAAAAAAAAEjE4NS4xMjEuMTc3LjE3Nzo1NTUzIOgBsd...</code><a href="#appendix-A.2-3.8.1" class="pilcrow">¶</a></p>
+          <li id="appendix-A.2-4.3">
+            <p id="appendix-A.2-4.3.1">LP(“198.51.100.1:5553”): 0x11 ‖ address<a href="#appendix-A.2-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="appendix-A.2-4.4">
+            <p id="appendix-A.2-4.4.1">LP(public key): 0x20 ‖ 32 bytes of key<a href="#appendix-A.2-4.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="appendix-A.2-4.5">
+            <p id="appendix-A.2-4.5.1">LP(“2.dnscrypt-cert.example.com”): 0x1B ‖ provider name<a href="#appendix-A.2-4.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="appendix-A.2-4.6">
+            <p id="appendix-A.2-4.6.1">Concatenate all components<a href="#appendix-A.2-4.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="appendix-A.2-4.7">
+            <p id="appendix-A.2-4.7.1">Base64url encode<a href="#appendix-A.2-4.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="appendix-A.2-4.8">
+            <p id="appendix-A.2-4.8.1">Final stamp: <code>sdns://AQcAAAAAAAAAETE5OC41MS4xMDAuMTo1NTUzIOgBsd...</code><a href="#appendix-A.2-4.8.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
@@ -2939,40 +2884,52 @@ payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
         <h3 id="name-example-3-dns-over-https">
 <a href="#appendix-A.3" class="section-number selfRef">A.3. </a><a href="#name-example-3-dns-over-https" class="section-name selfRef">Example 3: DNS-over-HTTPS</a>
         </h3>
-<p id="appendix-A.3-1">Configuration:
-- Hostname: cloudflare-dns.com
-- Path: /dns-query
-- No specific IP address
-- Certificate hash: <code>3b7f...b663</code> (32 bytes)
-- Properties: No logs (bit 1 set)<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
-<p id="appendix-A.3-2">Step-by-step encoding:<a href="#appendix-A.3-2" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="appendix-A.3-3">
-<li id="appendix-A.3-3.1">
-            <p id="appendix-A.3-3.1.1">Protocol identifier: <code>0x02</code><a href="#appendix-A.3-3.1.1" class="pilcrow">¶</a></p>
+<p id="appendix-A.3-1">Configuration:<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-A.3-2.1">
+            <p id="appendix-A.3-2.1.1">Hostname: <code>dns.example.com</code><a href="#appendix-A.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.3-3.2">
-            <p id="appendix-A.3-3.2.1">Properties: <code>0x02 0x00 0x00 0x00 0x00 0x00 0x00 0x00</code><a href="#appendix-A.3-3.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-A.3-2.2">
+            <p id="appendix-A.3-2.2.1">Path: <code>/dns-query</code><a href="#appendix-A.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.3-3.3">
-            <p id="appendix-A.3-3.3.1">LP(“”): <code>0x00</code> (empty address)<a href="#appendix-A.3-3.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-A.3-2.3">
+            <p id="appendix-A.3-2.3.1">No specific IP address<a href="#appendix-A.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.3-3.4">
-            <p id="appendix-A.3-3.4.1">VLP(cert hash): Since it’s the only hash, same as LP: <code>0x20</code> + 32 bytes<a href="#appendix-A.3-3.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-A.3-2.4">
+            <p id="appendix-A.3-2.4.1">Certificate hash: <code>3b7f...b663</code> (32 bytes)<a href="#appendix-A.3-2.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.3-3.5">
-            <p id="appendix-A.3-3.5.1">LP(“cloudflare-dns.com”): <code>0x12</code> + hostname<a href="#appendix-A.3-3.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-A.3-2.5">
+            <p id="appendix-A.3-2.5.1">Properties: No logs (bit 1 set)<a href="#appendix-A.3-2.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.3-3.6">
-            <p id="appendix-A.3-3.6.1">LP(“/dns-query”): <code>0x0A</code> + path<a href="#appendix-A.3-3.6.1" class="pilcrow">¶</a></p>
+        </ul>
+<p id="appendix-A.3-3">Step-by-step encoding:<a href="#appendix-A.3-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="appendix-A.3-4">
+<li id="appendix-A.3-4.1">
+            <p id="appendix-A.3-4.1.1">Protocol identifier: <code>0x02</code><a href="#appendix-A.3-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.3-3.7">
-            <p id="appendix-A.3-3.7.1">No bootstrap IPs<a href="#appendix-A.3-3.7.1" class="pilcrow">¶</a></p>
+          <li id="appendix-A.3-4.2">
+            <p id="appendix-A.3-4.2.1">Properties: <code>0x02 0x00 0x00 0x00 0x00 0x00 0x00 0x00</code><a href="#appendix-A.3-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.3-3.8">
-            <p id="appendix-A.3-3.8.1">Concatenate, base64url encode<a href="#appendix-A.3-3.8.1" class="pilcrow">¶</a></p>
+          <li id="appendix-A.3-4.3">
+            <p id="appendix-A.3-4.3.1">LP(“”): 0x00 (empty address)<a href="#appendix-A.3-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="appendix-A.3-3.9">
-            <p id="appendix-A.3-3.9.1">Final stamp: <code>sdns://AgIAAAAAAAAAAAASY2xvdWRmbGFyZS1kbnMuY29tCi9kbnMtcXVlcnk</code><a href="#appendix-A.3-3.9.1" class="pilcrow">¶</a></p>
+          <li id="appendix-A.3-4.4">
+            <p id="appendix-A.3-4.4.1">VLP(cert hash): Since it’s the only hash, same as LP: 0x20 ‖ 32 bytes<a href="#appendix-A.3-4.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="appendix-A.3-4.5">
+            <p id="appendix-A.3-4.5.1">LP(“dns.example.com”): 0x0F ‖ hostname<a href="#appendix-A.3-4.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="appendix-A.3-4.6">
+            <p id="appendix-A.3-4.6.1">LP(“/dns-query”): 0x0A ‖ path<a href="#appendix-A.3-4.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="appendix-A.3-4.7">
+            <p id="appendix-A.3-4.7.1">No bootstrap IPs<a href="#appendix-A.3-4.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="appendix-A.3-4.8">
+            <p id="appendix-A.3-4.8.1">Concatenate, base64url encode<a href="#appendix-A.3-4.8.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="appendix-A.3-4.9">
+            <p id="appendix-A.3-4.9.1">Final stamp: <code>sdns://AgIAAAAAAAAAAAAAD2Rucy5leGFtcGxlLmNvbQovZG5zLXF1ZXJ5</code><a href="#appendix-A.3-4.9.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
@@ -3071,133 +3028,17 @@ Decoded:
 </div>
 </section>
 </div>
-<div id="implementation-status">
-<section id="appendix-C">
-      <h2 id="name-implementation-status">
-<a href="#appendix-C" class="section-number selfRef">Appendix C. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
-      </h2>
-<p id="appendix-C-1">This section records the status of known implementations of DNS stamps.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
-<div id="dnscrypt-proxy">
-<section id="appendix-C.1">
-        <h3 id="name-dnscrypt-proxy">
-<a href="#appendix-C.1" class="section-number selfRef">C.1. </a><a href="#name-dnscrypt-proxy" class="section-name selfRef">dnscrypt-proxy</a>
-        </h3>
-<ul class="normal">
-<li class="normal" id="appendix-C.1-1.1">
-            <p id="appendix-C.1-1.1.1"><strong>Organization</strong>: Frank Denis<a href="#appendix-C.1-1.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.1-1.2">
-            <p id="appendix-C.1-1.2.1"><strong>Description</strong>: Flexible DNS proxy with comprehensive stamp support<a href="#appendix-C.1-1.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.1-1.3">
-            <p id="appendix-C.1-1.3.1"><strong>Maturity</strong>: Production<a href="#appendix-C.1-1.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.1-1.4">
-            <p id="appendix-C.1-1.4.1"><strong>Coverage</strong>: All stamp types<a href="#appendix-C.1-1.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.1-1.5">
-            <p id="appendix-C.1-1.5.1"><strong>License</strong>: ISC<a href="#appendix-C.1-1.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.1-1.6">
-            <p id="appendix-C.1-1.6.1"><strong>URL</strong>: https://github.com/dnscrypt/dnscrypt-proxy<a href="#appendix-C.1-1.6.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-</section>
-</div>
-<div id="adguard">
-<section id="appendix-C.2">
-        <h3 id="name-adguard">
-<a href="#appendix-C.2" class="section-number selfRef">C.2. </a><a href="#name-adguard" class="section-name selfRef">AdGuard</a>
-        </h3>
-<ul class="normal">
-<li class="normal" id="appendix-C.2-1.1">
-            <p id="appendix-C.2-1.1.1"><strong>Organization</strong>: AdGuard Software Limited<a href="#appendix-C.2-1.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.2-1.2">
-            <p id="appendix-C.2-1.2.1"><strong>Description</strong>: DNS privacy protection software<a href="#appendix-C.2-1.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.2-1.3">
-            <p id="appendix-C.2-1.3.1"><strong>Maturity</strong>: Production<a href="#appendix-C.2-1.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.2-1.4">
-            <p id="appendix-C.2-1.4.1"><strong>Coverage</strong>: DNSCrypt, DoH, DoT, DoQ<a href="#appendix-C.2-1.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.2-1.5">
-            <p id="appendix-C.2-1.5.1"><strong>License</strong>: Proprietary<a href="#appendix-C.2-1.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.2-1.6">
-            <p id="appendix-C.2-1.6.1"><strong>URL</strong>: https://adguard.com<a href="#appendix-C.2-1.6.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-</section>
-</div>
-<div id="simple-dnscrypt">
-<section id="appendix-C.3">
-        <h3 id="name-simple-dnscrypt">
-<a href="#appendix-C.3" class="section-number selfRef">C.3. </a><a href="#name-simple-dnscrypt" class="section-name selfRef">Simple DNSCrypt</a>
-        </h3>
-<ul class="normal">
-<li class="normal" id="appendix-C.3-1.1">
-            <p id="appendix-C.3-1.1.1"><strong>Organization</strong>: Christian Hermann<a href="#appendix-C.3-1.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.3-1.2">
-            <p id="appendix-C.3-1.2.1"><strong>Description</strong>: Windows GUI for dnscrypt-proxy<a href="#appendix-C.3-1.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.3-1.3">
-            <p id="appendix-C.3-1.3.1"><strong>Maturity</strong>: Production<a href="#appendix-C.3-1.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.3-1.4">
-            <p id="appendix-C.3-1.4.1"><strong>Coverage</strong>: All stamp types via dnscrypt-proxy<a href="#appendix-C.3-1.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.3-1.5">
-            <p id="appendix-C.3-1.5.1"><strong>License</strong>: MIT<a href="#appendix-C.3-1.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.3-1.6">
-            <p id="appendix-C.3-1.6.1"><strong>URL</strong>: https://simplednscrypt.org<a href="#appendix-C.3-1.6.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-</section>
-</div>
-<div id="yogadns">
-<section id="appendix-C.4">
-        <h3 id="name-yogadns">
-<a href="#appendix-C.4" class="section-number selfRef">C.4. </a><a href="#name-yogadns" class="section-name selfRef">YogaDNS</a>
-        </h3>
-<ul class="normal">
-<li class="normal" id="appendix-C.4-1.1">
-            <p id="appendix-C.4-1.1.1"><strong>Organization</strong>: YogaDNS<a href="#appendix-C.4-1.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.4-1.2">
-            <p id="appendix-C.4-1.2.1"><strong>Description</strong>: Advanced DNS client for Windows<a href="#appendix-C.4-1.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.4-1.3">
-            <p id="appendix-C.4-1.3.1"><strong>Maturity</strong>: Production<a href="#appendix-C.4-1.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.4-1.4">
-            <p id="appendix-C.4-1.4.1"><strong>Coverage</strong>: DNSCrypt, DoH, DoT<a href="#appendix-C.4-1.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.4-1.5">
-            <p id="appendix-C.4-1.5.1"><strong>License</strong>: Proprietary<a href="#appendix-C.4-1.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.4-1.6">
-            <p id="appendix-C.4-1.6.1"><strong>URL</strong>: https://yogadns.com<a href="#appendix-C.4-1.6.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-</section>
-</div>
-</section>
-</div>
 <div id="acknowledgments">
-<section id="appendix-D">
+<section id="appendix-C">
       <h2 id="name-acknowledgments">
-<a href="#appendix-D" class="section-number selfRef">Appendix D. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+<a href="#appendix-C" class="section-number selfRef">Appendix C. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-D-1">The author would like to thank the DNSCrypt community for their extensive feedback and implementation experience. Special recognition goes to the developers of the various DNS stamp implementations who helped refine the format through practical deployment.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
-<p id="appendix-D-2">Thanks also to the teams behind secure DNS protocols - DNSCrypt, DoH, DoT, and DoQ - whose work made DNS stamps both necessary and useful. Their efforts to improve DNS privacy and security provided the foundation for this specification.<a href="#appendix-D-2" class="pilcrow">¶</a></p>
+<p id="appendix-C-1">The author would like to thank the DNSCrypt community for their extensive feedback and implementation experience. Special recognition goes to the developers of the various DNS stamp implementations who helped refine the format through practical deployment.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
+<p id="appendix-C-2">Thanks also to the teams behind secure DNS protocols - DNSCrypt, Anonymized DNSCrypt, DoH, DoT, and DoQ - whose work made DNS stamps both necessary and useful. Their efforts to improve DNS privacy and security provided the foundation for this specification.<a href="#appendix-C-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-E">
+<section id="appendix-D">
       <h2 id="name-authors-address">
 <a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
       </h2>
