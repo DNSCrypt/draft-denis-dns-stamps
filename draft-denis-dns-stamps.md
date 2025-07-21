@@ -730,4 +730,4 @@ Decoded:
 
 The author would like to thank the DNSCrypt community for their extensive feedback and implementation experience. Special recognition goes to the developers of the various DNS stamp implementations who helped refine the format through practical deployment.
 
-Thanks also to the teams behind secure DNS protocols - DNSCrypt, Anonymized DNSCrypt, DoH, DoT, and DoQ - whose work made DNS stamps both necessary and useful. Their efforts to improve DNS privacy and security provided the foundation for this specification.
+Thanks also to the teams behind secure DNS protocols: DNSCrypt, DoH, DoT, and DoQ whose work made DNS stamps both necessary and useful. Their efforts to improve DNS privacy and security provided the foundation for this specification.
