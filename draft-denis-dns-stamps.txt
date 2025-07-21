@@ -157,9 +157,9 @@ Table of Contents
    operates over unencrypted UDP and TCP connections on port 53, modern
    DNS deployments increasingly use encrypted transports to provide
    confidentiality and integrity.  These secure protocols include
-   DNSCrypt [DNSCRYPT], DNS-over-TLS (DoT) [RFC7858], DNS-over-HTTPS
-   (DoH) [RFC8484], DNS-over-QUIC (DoQ) [RFC9250], and Oblivious DNS-
-   over-HTTPS [ODOH].
+   DNSCrypt [I-D.draft-denis-dprive-dnscrypt], DNS-over-TLS (DoT)
+   [RFC7858], DNS-over-HTTPS (DoH) [RFC8484], DNS-over-QUIC (DoQ)
+   [RFC9250], and Oblivious DNS-over-HTTPS [ODOH].
 
    Each secure DNS protocol requires different configuration parameters.
    DNSCrypt needs a provider public key and provider name in addition to
@@ -827,6 +827,12 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 
 9.1.  Normative References
 
+   [I-D.draft-denis-dprive-dnscrypt]
+              Denis, F., "The DNSCrypt Protocol", Work in Progress,
+              Internet-Draft, draft-denis-dprive-dnscrypt-06, 15 April
+              2025, <https://datatracker.ietf.org/doc/html/draft-denis-
+              dprive-dnscrypt-06>.
+
    [RFC1035]  Mockapetris, P., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <https://www.rfc-editor.org/rfc/rfc1035>.
@@ -877,9 +883,6 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
               <https://www.rfc-editor.org/rfc/rfc9250>.
 
 9.2.  Informative References
-
-   [DNSCRYPT] "DNSCrypt Protocol Specification", 2019,
-              <https://dnscrypt.info/protocol>.
 
    [ODOH]     "Oblivious DNS over HTTPS", 2023,
               <https://datatracker.ietf.org/doc/draft-pauly-dprive-
