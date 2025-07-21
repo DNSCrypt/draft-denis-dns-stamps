@@ -1,30 +1,21 @@
 ---
 title: "The DNS Stamps Specification"
 abbrev: "DNS Stamps"
-category: info
-
 docname: draft-denis-dns-stamps-latest
-submissiontype: independent
-number:
-date:
-consensus: true
-v: 3
-area: INT
-keyword:
- - DNS
- - DNSCrypt
- - DNS-over-HTTPS
- - DNS-over-TLS
- - DNS-over-QUIC
- - Security
- - Privacy
-venue:
-  github: jedisct1/draft-denis-dns-stamps
-  latest: https://jedisct1.github.io/draft-denis-dns-stamps/draft-denis-dns-stamps.html
+category: std
+
+ipr: trust200902
+keyword: Internet-Draft
+submissionType: IETF
+
+stand_alone: yes
+smart_quotes: yes
+pi: [toc, sortrefs, symrefs]
 
 author:
  -
-    fullname: Frank Denis
+    ins: F. Denis
+    name: Frank Denis
     organization: Individual Contributor
     email: fde@00f.net
 
@@ -42,6 +33,7 @@ normative:
 
 informative:
   RFC3552:
+  RFC5116:
   RFC8310:
   RFC9230:
   DNSCRYPT:
@@ -53,39 +45,44 @@ informative:
     target: "https://datatracker.ietf.org/doc/draft-pauly-dprive-oblivious-doh/"
     date: 2023
 
-...
-
 --- abstract
 
-This document specifies DNS Stamps, a compact format for encoding the parameters needed to connect to DNS resolvers using various secure protocols. DNS Stamps encode all necessary configuration data including IP addresses, host names, public keys, and protocol-specific parameters into a single URI that can be easily shared and imported by supporting DNS client software. The format supports multiple secure DNS protocols including DNSCrypt, DNS-over-HTTPS (DoH), DNS-over-TLS (DoT), DNS-over-QUIC (DoQ), and Oblivious DoH, as well as relay servers for anonymization.
-
+This document specifies DNS Stamps, a compact format that encodes the information needed to connect to DNS resolvers. DNS Stamps encode all necessary parameters including addresses, hostnames, cryptographic keys, and protocol-specific configuration into a single string using a standard URI format. The specification supports multiple secure DNS protocols including DNSCrypt, DNS-over-HTTPS (DoH), DNS-over-TLS (DoT), DNS-over-QUIC (DoQ), and Oblivious DoH.
 
 --- middle
 
 # Introduction
 
-Modern DNS clients support a variety of protocols for secure and private DNS resolution beyond traditional unencrypted DNS {{RFC1035}}. These include DNSCrypt {{DNSCRYPT}}, DNS-over-HTTPS (DoH) {{RFC8484}}, DNS-over-TLS (DoT) {{RFC7858}}, DNS-over-QUIC (DoQ) {{RFC9250}}, and Oblivious DNS-over-HTTPS {{ODOH}}. Each protocol requires different configuration parameters such as IP addresses, host names, paths, port numbers, and cryptographic keys.
+The Domain Name System (DNS) has evolved significantly from its original design as specified in {{RFC1035}}. While traditional DNS operates over unencrypted UDP and TCP connections on port 53, modern DNS deployments increasingly use encrypted transports to provide confidentiality and integrity. These secure protocols include DNSCrypt {{DNSCRYPT}}, DNS-over-TLS (DoT) {{RFC7858}}, DNS-over-HTTPS (DoH) {{RFC8484}}, DNS-over-QUIC (DoQ) {{RFC9250}}, and Oblivious DNS-over-HTTPS {{ODOH}}.
 
-Configuring a DNS client to use these secure protocols typically requires users to input multiple parameters correctly, which can be error-prone and creates barriers to adoption. Different client implementations often use incompatible configuration formats, making it difficult to share resolver configurations across applications and platforms.
+Each secure DNS protocol requires different configuration parameters. DNSCrypt needs a provider public key and provider name in addition to server addresses. DoH requires HTTPS endpoints and paths. DoT and DoQ need TLS configuration including certificate validation parameters. This diversity in configuration requirements creates significant challenges for both users and applications attempting to configure secure DNS resolvers.
 
-DNS Stamps address these challenges by encoding all parameters required to connect to a DNS resolver into a single, compact string that uses a URI format. This enables:
+Current approaches to DNS configuration suffer from several limitations. Operating system interfaces typically support only IP addresses for DNS servers, providing no mechanism to specify encryption protocols or authentication parameters. Application-specific configuration files lack standardization, making it difficult to share configurations across different DNS client implementations. Manual configuration is error-prone, particularly when dealing with cryptographic parameters like public keys or certificate hashes. There is no standard way to distribute complete resolver configurations that would enable users to easily switch between different secure DNS providers.
 
-- Simple sharing of resolver configurations through copy-paste, QR codes, or URLs
-- Consistent configuration format across different client implementations
-- Reduced configuration errors through validation of the stamp format
-- Support for multiple protocols through a unified format
+DNS Stamps address these challenges by encoding all parameters required to connect to a DNS resolver into a single, compact string using a URI format. This approach enables simple sharing of resolver configurations through copy-paste, QR codes, or URLs. It provides a consistent format across different client implementations, reduces configuration errors through format validation, and supports multiple protocols through a unified specification. DNS Stamps have been implemented in numerous DNS client applications and are used by several public DNS resolver operators to publish their server configurations.
 
-DNS Stamps have been implemented in numerous DNS client applications and are used by several public DNS resolver operators to publish their server configurations. This document standardizes the DNS Stamps format to ensure interoperability across implementations.
+The remainder of this document is organized as follows. Section 2 establishes conventions and defines the encoding primitives used throughout the specification. Section 3 provides a high-level overview of the DNS Stamps format. Section 4 details the specific format for each supported protocol. Section 5 covers operational aspects including generation, parsing, and validation. Section 6 analyzes security considerations. Section 7 discusses implementation considerations. Section 8 specifies IANA registrations. The appendices provide test vectors and examples.
 
-## Notational Conventions
-
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 {{RFC2119}} {{RFC8174}} when, and only when, they appear in all capitals, as shown here.
-
-# Terminology and Definitions
+# Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
 
-This document uses the following terminology and encoding primitives:
+## Terminology
+
+This document uses the following terminology:
+
+DNS Stamp
+: A URI-formatted string that encodes all parameters needed to connect to a DNS resolver.
+
+Protocol Identifier
+: A single byte value that identifies the DNS protocol type encoded in the stamp.
+
+Properties
+: A 64-bit little-endian integer encoding informal properties about the DNS resolver.
+
+## Encoding Primitives
+
+The following encoding primitives are used throughout this specification:
 
 `||`
 : Denotes concatenation of byte sequences.
@@ -94,520 +91,715 @@ This document uses the following terminology and encoding primitives:
 : Denotes the bitwise OR operation.
 
 `len(x)`
-: A single byte (unsigned 8-bit integer) representing the length of x in bytes, where x is a byte sequence of maximum length 255.
+: A single byte (unsigned 8-bit integer) representing the length of `x` in bytes, where `x` is a byte sequence of maximum length 255.
 
 `vlen(x)`
-: Variable length encoding. Equal to len(x) if x is the last element of a set. Otherwise equal to (0x80 | len(x)), indicating more elements follow.
+: Variable length encoding. Equal to `len(x)` if `x` is the last element of a set. Otherwise equal to `(0x80 | len(x))`, indicating more elements follow.
 
 `LP(x)`
-: Length-prefixed encoding, defined as len(x) || x.
+: Length-prefixed encoding, defined as `len(x) || x`.
 
 `VLP(x1, x2, ...xn)`
-: Variable-length-prefixed set encoding, defined as vlen(x1) || x1 || vlen(x2) || x2 ... || vlen(xn) || xn.
+: Variable-length-prefixed set encoding, defined as `vlen(x1) || x1 || vlen(x2) || x2 ... || vlen(xn) || xn`. For a single-element set, `VLP(x) == LP(x)`.
 
 `[x]`
-: Denotes that x is optional.
+: Denotes that `x` is optional and may be omitted.
 
 `base64url(x)`
-: The base64url encoding of x as specified in Section 5 of {{RFC4648}}, without padding characters.
-
-Protocol Identifier
-: A single byte value that identifies the DNS protocol type encoded in the stamp.
-
-Properties
-: A 64-bit little-endian integer encoding informal properties about the DNS resolver.
+: The URL-safe base64 encoding of `x` as specified in Section 5 of {{RFC4648}}, without padding characters.
 
 # DNS Stamps Format Overview
+
+This section provides a high-level overview of the DNS Stamps format before detailing specific protocol encodings.
+
+## URI Structure
 
 A DNS Stamp is a URI {{RFC3986}} with the following format:
 
 ~~~
-   "sdns://" base64url(payload)
+sdns://base64url(payload)
 ~~~
 
-Where payload is a protocol-specific byte sequence that always begins with a protocol identifier byte, followed by protocol-specific parameters. The base64url encoding is applied to the entire payload as a single operation, not to individual parameters.
+The stamp begins with the scheme `sdns://` followed by a base64url-encoded payload. The payload is a byte sequence that encodes all parameters needed to connect to the DNS resolver.
+
+## Payload Structure
 
 The general structure of the payload is:
 
 ~~~
-   protocol_id || protocol_specific_data
+protocol_identifier || protocol_specific_data
 ~~~
+
+The payload always begins with a single-byte protocol identifier that determines how to interpret the remaining bytes. The base64url encoding is applied to the entire payload as a single operation after concatenating all components.
 
 ## Protocol Identifiers
 
 The following protocol identifiers are defined:
 
-| Value | Protocol |
-|-------|----------|
-| 0x00  | Plain DNS |
-| 0x01  | DNSCrypt |
-| 0x02  | DNS-over-HTTPS |
-| 0x03  | DNS-over-TLS |
-| 0x04  | DNS-over-QUIC |
-| 0x05  | Oblivious DoH Target |
-| 0x81  | Anonymized DNSCrypt Relay |
-| 0x85  | Oblivious DoH Relay |
+| Value | Protocol                  | Description                      |
+| ----- | ------------------------- | -------------------------------- |
+| 0x00  | Plain DNS                 | Traditional unencrypted DNS      |
+| 0x01  | DNSCrypt                  | DNSCrypt protocol                |
+| 0x02  | DNS-over-HTTPS            | DNS queries over HTTPS           |
+| 0x03  | DNS-over-TLS              | DNS queries over TLS             |
+| 0x04  | DNS-over-QUIC             | DNS queries over QUIC            |
+| 0x05  | Oblivious DoH Target      | Target server for Oblivious DoH  |
+| 0x81  | Anonymized DNSCrypt Relay | Relay for DNSCrypt anonymization |
+| 0x85  | Oblivious DoH Relay       | Relay for Oblivious DoH          |
+
+Protocol identifiers in the range 0x80-0xFF are reserved for relay/proxy protocols that forward queries to other servers.
 
 ## Properties Field
 
-Several stamp types include a properties field, which is a 64-bit little-endian integer. The following property flags are defined:
+Several stamp types include a properties field, which is a 64-bit little-endian integer. Each bit in this field represents a property of the resolver:
 
-| Bit | Property |
-|-----|----------|
-| 0   | DNSSEC - The server supports DNSSEC validation |
-| 1   | No Logs - The server does not keep query logs |
-| 2   | No Filter - The server does not filter or block domains |
+| Bit  | Property  | Description                                 |
+| ---- | --------- | ------------------------------------------- |
+| 0    | DNSSEC    | The server validates DNSSEC signatures      |
+| 1    | No Logs   | The server does not keep query logs         |
+| 2    | No Filter | The server does not filter or block domains |
+| 3-63 | Reserved  | Must be set to zero                         |
 
-All other bits are reserved and MUST be set to zero. Clients MUST ignore unknown property flags.
+When encoding, undefined property bits MUST be set to zero. When decoding, undefined property bits MUST be ignored to allow future extensions.
 
 # Protocol-Specific Stamp Formats
 
+This section specifies the exact format for each supported protocol type. Each format is presented with its structure, field descriptions, and encoding requirements.
+
 ## Plain DNS Stamps
 
-Plain DNS stamps encode parameters for connecting to traditional DNS resolvers:
+Plain DNS stamps encode parameters for traditional unencrypted DNS resolvers.
+
+### Format
 
 ~~~
-   payload = 0x00 || props || LP(addr [:port])
+payload = 0x00 || props || LP(addr)
 ~~~
 
-Where:
+### Fields
 
-- `0x00` is the protocol identifier for plain DNS
-- `props` is the properties field (8 bytes, little-endian)
-- `addr` is the IP address as a string. IPv6 addresses MUST be enclosed in square brackets (e.g., "[2001:db8::1]"). The port number is optional and defaults to 53.
+`0x00`
+: Protocol identifier for plain DNS.
 
-Example: A plain DNS server at 8.8.8.8 with DNSSEC support would be encoded as:
+`props`
+: Properties field (8 bytes, little-endian).
 
-~~~
-   sdns://AAEAAAAAAAAABzguOC44Ljg
-~~~
+`addr`
+: IP address and optional port as a string. IPv6 addresses MUST be enclosed in square brackets. Default port is 53.
+
+### Address Format
+
+- IPv4: `"192.0.2.1"` or `"192.0.2.1:5353"`
+- IPv6: `"[2001:db8::1]"` or `"[2001:db8::1]:5353"`
 
 ## DNSCrypt Stamps
 
-DNSCrypt stamps encode parameters for DNSCrypt servers:
+DNSCrypt stamps encode parameters for DNSCrypt servers.
+
+### Format
 
 ~~~
-   payload = 0x01 || props || LP(addr [:port]) || LP(pk) || 
-             LP(providerName)
+payload = 0x01 || props || LP(addr) || LP(pk) || LP(provider_name)
 ~~~
 
-Where:
+### Fields
 
-- `0x01` is the protocol identifier for DNSCrypt
-- `props` is the properties field (8 bytes, little-endian)
-- `addr` is the IP address and optional port. IPv6 addresses MUST be enclosed in square brackets. Default port is 443.
-- `pk` is the provider's Ed25519 public key (32 bytes, raw format)
-- `providerName` is the DNSCrypt provider name (e.g., "2.dnscrypt-cert.example.com")
+`0x01`
+: Protocol identifier for DNSCrypt.
+
+`props`
+: Properties field (8 bytes, little-endian).
+
+`addr`
+: IP address and optional port. IPv6 addresses MUST be enclosed in square brackets. Default port is 443.
+
+`pk`
+: Provider's Ed25519 public key (exactly 32 bytes, raw binary format).
+
+`provider_name`
+: DNSCrypt provider name (e.g., `"2.dnscrypt-cert.example.com"`).
+
+### Requirements
+
+- The public key MUST be exactly 32 bytes.
+- The provider name MUST be a valid DNS name.
+- The provider name MUST NOT include a terminating period.
 
 ## DNS-over-HTTPS Stamps
 
-DoH stamps encode parameters for DNS-over-HTTPS servers:
+DoH stamps encode parameters for DNS-over-HTTPS servers.
+
+### Format
 
 ~~~
-   payload = 0x02 || props || LP(addr) || VLP(hash1, ..., hashn) ||
-             LP(hostname [:port]) || LP(path) 
-             [ || VLP(bootstrap1, ..., bootstrapn) ]
+payload = 0x02 || props || LP(addr) || VLP(hash1, ..., hashn) ||
+          LP(hostname) || LP(path) [ || VLP(bootstrap1, ..., bootstrapn) ]
 ~~~
 
-Where:
+### Fields
 
-- `0x02` is the protocol identifier for DNS-over-HTTPS
-- `props` is the properties field (8 bytes, little-endian)
-- `addr` is the server IP address (may be empty string)
-- `hashi` values are SHA256 digests (32 bytes each) of TBS certificates
-- `hostname` is the server hostname for TLS SNI. Default port is 443.
-- `path` is the absolute URI path (e.g., "/dns-query")
-- `bootstrapi` values are optional IP addresses for resolving hostname
+`0x02`
+: Protocol identifier for DNS-over-HTTPS.
+
+`props`
+: Properties field (8 bytes, little-endian).
+
+`addr`
+: IP address of the server. May be empty string if hostname resolution is required.
+
+`hashi`
+: SHA256 digests of certificates in the validation chain (each exactly 32 bytes).
+
+`hostname`
+: Server hostname with optional port. Default port is 443.
+
+`path`
+: Absolute URI path (e.g., `"/dns-query"`).
+
+`bootstrapi`
+: Optional IP addresses for resolving hostname.
+
+### Requirements
+
+- Certificate hashes MUST be exactly 32 bytes each.
+- The hostname MUST NOT be percent-encoded or punycode-encoded.
+- The path MUST start with "/".
+- Bootstrap addresses follow the same format as `addr`.
 
 ## DNS-over-TLS Stamps
 
-DoT stamps encode parameters for DNS-over-TLS servers:
+DoT stamps encode parameters for DNS-over-TLS servers.
+
+### Format
 
 ~~~
-   payload = 0x03 || props || LP(addr) || VLP(hash1, ..., hashn) ||
-             LP(hostname [:port]) 
-             [ || VLP(bootstrap1, ..., bootstrapn) ]
+payload = 0x03 || props || LP(addr) || VLP(hash1, ..., hashn) ||
+          LP(hostname) [ || VLP(bootstrap1, ..., bootstrapn) ]
 ~~~
 
-Where:
+### Fields
 
-- `0x03` is the protocol identifier for DNS-over-TLS
-- Parameters have the same meaning as DoH stamps
-- Default port is 853
+`0x03`
+: Protocol identifier for DNS-over-TLS.
+
+Other fields have the same meaning as DoH stamps, except:
+- Default port is 853.
+- No path field is included.
 
 ## DNS-over-QUIC Stamps
 
-DoQ stamps encode parameters for DNS-over-QUIC servers:
+DoQ stamps encode parameters for DNS-over-QUIC servers.
+
+### Format
 
 ~~~
-   payload = 0x04 || props || LP(addr) || VLP(hash1, ..., hashn) ||
-             LP(hostname [:port]) 
-             [ || VLP(bootstrap1, ..., bootstrapn) ]
+payload = 0x04 || props || LP(addr) || VLP(hash1, ..., hashn) ||
+          LP(hostname) [ || VLP(bootstrap1, ..., bootstrapn) ]
 ~~~
 
-Where:
+### Fields
 
-- `0x04` is the protocol identifier for DNS-over-QUIC
-- Parameters have the same meaning as DoH stamps
-- Default port is 853
+`0x04`
+: Protocol identifier for DNS-over-QUIC.
+
+Other fields have the same meaning as DoT stamps.
 
 ## Oblivious DoH Target Stamps
 
-ODoH target stamps encode parameters for Oblivious DoH target servers:
+ODoH target stamps encode parameters for Oblivious DoH target servers.
+
+### Format
 
 ~~~
-   payload = 0x05 || props || LP(hostname [:port]) || LP(path)
+payload = 0x05 || props || LP(hostname) || LP(path)
 ~~~
 
-Where:
+### Fields
 
-- `0x05` is the protocol identifier for Oblivious DoH targets
-- `hostname` and `path` have the same meaning as in DoH stamps
+`0x05`
+: Protocol identifier for Oblivious DoH targets.
+
+`props`
+: Properties field (8 bytes, little-endian).
+
+`hostname`
+: Server hostname with optional port. Default port is 443.
+
+`path`
+: Absolute URI path.
 
 ## Anonymized DNSCrypt Relay Stamps
 
-DNSCrypt relay stamps encode parameters for anonymization relays:
+DNSCrypt relay stamps encode parameters for anonymization relays.
+
+### Format
 
 ~~~
-   payload = 0x81 || LP(addr [:port])
+payload = 0x81 || LP(addr)
 ~~~
 
-Where:
+### Fields
 
-- `0x81` is the protocol identifier for DNSCrypt relays
-- `addr` is the relay IP address and port
+`0x81`
+: Protocol identifier for DNSCrypt relays.
+
+`addr`
+: IP address and port. Port specification is mandatory.
 
 ## Oblivious DoH Relay Stamps
 
-ODoH relay stamps encode parameters for Oblivious DoH relays:
+ODoH relay stamps encode parameters for Oblivious DoH relays.
+
+### Format
 
 ~~~
-   payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
-             LP(hostname [:port]) || LP(path)
-             [ || VLP(bootstrap1, ..., bootstrapn) ]
+payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
+          LP(hostname) || LP(path) [ || VLP(bootstrap1, ..., bootstrapn) ]
 ~~~
 
-Where:
+### Fields
 
-- `0x85` is the protocol identifier for ODoH relays
-- Parameters have the same meaning as DoH stamps
+`0x85`
+: Protocol identifier for ODoH relays.
 
-# Encoding Examples
+Other fields have the same meaning as DoH stamps.
 
-This section provides examples of encoding common DNS resolver configurations as stamps.
+# Usage and Operations
 
-## Example 1: DNSCrypt Server
+This section describes how to generate, parse, and validate DNS stamps in practice.
 
-Server configuration:
-- IP: 185.121.177.177
-- Port: 5553
-- Provider public key (hex): e801b1d5e2f1e3e34b44d164c1c93a3e92703f99494bb454ed0226d64dc8bf82
-- Provider name: 2.dnscrypt-cert.scaleway-fr
-- Properties: DNSSEC, no logs, no filter
+## Generating DNS Stamps
 
-Encoding steps:
-1. Protocol ID: 0x01
-2. Properties: 0x07 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-3. LP("185.121.177.177:5553"): 0x14 || "185.121.177.177:5553"
-4. LP(public key): 0x20 || [32 bytes of public key]
-5. LP("2.dnscrypt-cert.scaleway-fr"): 0x1B || "2.dnscrypt-cert.scaleway-fr"
+To generate a DNS stamp:
 
-## Example 2: DNS-over-HTTPS Server
+1. Select the appropriate protocol identifier.
+2. Encode the properties field as 8 bytes in little-endian format.
+3. Encode each parameter using the specified length-prefixing.
+4. Concatenate all components in the specified order.
+5. Apply base64url encoding to the complete payload.
+6. Prepend `"sdns://"` to create the final stamp.
 
-Server configuration:
-- Hostname: dns.example.com
-- Path: /dns-query
-- Certificate hash (hex): 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
-- Properties: DNSSEC, no logs
-
-Encoding steps:
-1. Protocol ID: 0x02
-2. Properties: 0x03 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-3. LP(""): 0x00 (empty address)
-4. VLP(cert hash): 0x20 || [32 bytes of certificate hash]
-5. LP("dns.example.com"): 0x0F || "dns.example.com"
-6. LP("/dns-query"): 0x0A || "/dns-query"
-
-# Implementation Considerations
-
-## Stamp Parsing
-
-Implementations parsing DNS stamps MUST:
-
-1. Verify the URI begins with "sdns://"
-2. Decode the base64url payload
-3. Verify the payload contains at least one byte (protocol identifier)
-4. Parse the protocol-specific parameters based on the identifier
-5. Validate all length-prefixed fields do not exceed the payload bounds
-6. Reject stamps with unknown protocol identifiers
-7. Ignore unknown property flags (forward compatibility)
-
-## Stamp Generation
+### Implementation Requirements
 
 Implementations generating DNS stamps MUST:
 
-1. Use the correct protocol identifier
-2. Set only defined property flags
-3. Ensure all strings are UTF-8 encoded
-4. Apply base64url encoding without padding
-5. Validate the total stamp length is reasonable for the use case
+- Validate that all parameters meet format requirements.
+- Ensure strings are valid UTF-8.
+- Set undefined property bits to zero.
+- Include all mandatory fields for the protocol type.
+- Generate stamps that can be parsed by compliant implementations.
 
-## Error Handling
+## Parsing DNS Stamps
 
-Implementations SHOULD provide clear error messages for common issues:
+To parse a DNS stamp:
+
+1. Verify the stamp begins with `"sdns://"`.
+2. Extract and base64url-decode the payload.
+3. Read the first byte as the protocol identifier.
+4. Parse remaining fields according to the protocol format.
+5. Validate all fields meet requirements.
+
+### Error Handling
+
+Implementations MUST detect and handle these error conditions:
 
 - Invalid base64url encoding
 - Unknown protocol identifier
-- Truncated or malformed payload
-- Invalid certificate hashes (wrong length)
-- Invalid public keys (wrong length or format)
+- Truncated payload
+- Invalid length prefixes
+- Malformed fields
+
+Implementations SHOULD provide descriptive error messages indicating the specific validation failure.
+
+## Validation Requirements
+
+### Length Validation
+
+- Length prefixes MUST NOT exceed remaining payload size.
+- Certificate hashes MUST be exactly 32 bytes.
+- Ed25519 public keys MUST be exactly 32 bytes.
+- Properties field MUST be exactly 8 bytes.
+
+### Format Validation
+
+- IP addresses MUST be valid IPv4 or IPv6 addresses.
+- Hostnames MUST be valid DNS names.
+- Ports MUST be in the range 1-65535.
+- Paths MUST begin with "/".
+
+### Semantic Validation
+
+- Certificate hashes SHOULD be validated against actual certificates.
+- Provider names SHOULD be verified to exist in DNS.
+- Bootstrap resolvers SHOULD be reachable.
 
 ## Internationalization
 
-Hostnames in DNS stamps MUST be represented using their original Unicode form when contained within the stamp payload. Implementations MUST NOT apply Punycode encoding to hostnames before encoding them in stamps. The rationale is that:
+Hostnames in DNS stamps MUST be represented in their Unicode form within the stamp payload. Implementations MUST NOT apply punycode encoding before storing hostnames in stamps. When using the hostname for actual DNS queries or TLS connections, implementations MUST apply the appropriate encoding for the protocol being used.
 
-1. DNS stamps are not constrained by the ASCII limitations of the DNS protocol
-2. Preserving Unicode hostnames improves readability when stamps are decoded
-3. Client implementations will apply appropriate encoding when making DNS queries
-
-When establishing TLS connections, implementations MUST convert Unicode hostnames to their ASCII-compatible encoding as required by the underlying protocols.
+This approach:
+- Preserves readability when stamps are decoded for display
+- Avoids double-encoding issues
+- Allows implementations to apply protocol-specific encoding rules
 
 # Security Considerations
 
-## Stamp Distribution
+## Stamp Integrity
 
-DNS stamps contain security-critical parameters including cryptographic keys and certificate hashes. The integrity and authenticity of stamps is essential for secure DNS resolution. Stamps obtained from untrusted sources could direct users to malicious resolvers.
+DNS stamps contain security-critical configuration including server addresses, cryptographic keys, and certificate hashes. The integrity of stamps is essential - a modified stamp could redirect users to malicious resolvers.
+
+### Threats
+
+- **Substitution**: Replacing legitimate stamps with malicious ones
+- **Modification**: Altering addresses, keys, or certificate hashes
+- **Downgrade**: Replacing secure protocol stamps with insecure ones
+
+### Mitigations
 
 Implementations SHOULD:
-- Obtain stamps over secure channels (HTTPS)
-- Verify stamps against known-good values when possible
+- Obtain stamps over authenticated channels (HTTPS with certificate validation)
+- Verify stamps against known-good values when available
 - Warn users when importing stamps from untrusted sources
-- Validate cryptographic parameters before use
+- Validate all cryptographic parameters before use
 
 ## Certificate Validation
 
-DNS stamps for protocols using TLS (DoH, DoT, DoQ) include SHA256 hashes of certificates in the validation chain. These hashes enable certificate pinning but require updates when certificates are rotated.
+For protocols using TLS (DoH, DoT, DoQ), stamps may include SHA256 hashes of certificates in the validation chain. These provide certificate pinning but require careful management.
+
+### Security Requirements
 
 Implementations MUST:
-- Validate that at least one certificate in the chain matches a provided hash
-- Follow standard certificate validation procedures per {{RFC5280}}
-- Handle certificate rotation gracefully
+- Verify at least one certificate in the chain matches a provided hash
+- Follow standard certificate validation per {{RFC5280}}
+- Check certificate validity periods and signatures
+- Verify the certificate matches the specified hostname
+
+### Operational Considerations
 
 Implementations SHOULD:
 - Support multiple certificate hashes to enable rotation
-- Provide clear error messages for certificate validation failures
-- Allow fallback to standard WebPKI validation if explicitly configured
+- Provide clear errors for validation failures
+- Allow optional fallback to standard WebPKI validation
+- Cache certificate validation results appropriately
 
 ## Privacy Considerations
 
-DNS stamps may contain information that affects user privacy:
+DNS stamps may reveal information about resolver configuration:
 
-- IP addresses reveal the geographic location of resolvers
-- Properties flags indicate logging policies
-- Bootstrap resolvers may be subject to different privacy policies
+- **Server Locations**: IP addresses indicate geographic regions
+- **Logging Policies**: Properties flags indicate data retention
+- **Query Privacy**: Bootstrap resolvers may see some queries
 
-Users should be informed about the privacy properties of resolvers encoded in stamps, particularly regarding logging policies and data retention.
+Users should understand the privacy implications of their chosen resolvers. Applications SHOULD display relevant properties clearly.
 
-## Downgrade Attacks
+## Implementation Security
 
-Clients supporting multiple protocols MUST NOT automatically downgrade from a more secure protocol to a less secure one based on stamp contents. For example, a client should not silently fall back from DoH to plain DNS if both stamps are available.
+### Parsing Safety
 
-## Malformed Stamps
+Malformed stamps could trigger implementation vulnerabilities:
 
-Malformed or malicious stamps could potentially cause buffer overflows, infinite loops, or excessive resource consumption. Implementations MUST:
+- **Buffer Overflows**: Validate all lengths before allocation
+- **Integer Overflows**: Check length calculations
+- **Resource Exhaustion**: Limit maximum stamp size
 
-- Validate all length fields before allocation
-- Impose reasonable limits on string lengths
-- Avoid recursive parsing that could cause stack exhaustion
-- Handle base64 decoding errors gracefully
+### Cryptographic Safety
 
-# Operational Considerations
+- Validate Ed25519 public keys are valid points
+- Ensure certificate hashes are compared in constant time
+- Use cryptographically secure random numbers where needed
 
-## Stamp Management
+## Downgrade Prevention
 
-Organizations deploying DNS stamps should:
+Applications supporting multiple protocols MUST NOT automatically downgrade from secure to less secure protocols. For example:
 
-1. Maintain stamps in version control
-2. Document the meaning of property flags used
-3. Plan for certificate rotation
-4. Monitor stamp validity and update as needed
-5. Provide both human-readable and stamp formats
+- Never downgrade from DoH to plain DNS
+- Never ignore certificate validation failures
+- Never bypass authentication requirements
 
-## Client Configuration
+If a secure connection fails, the implementation SHOULD report the error rather than attempting insecure alternatives.
 
-DNS client implementations using stamps should:
+# Implementation Considerations
 
-1. Allow users to view decoded stamp contents
-2. Support importing stamps from clipboard/files
-3. Validate stamps before saving configuration
-4. Provide export functionality for sharing
-5. Support multiple stamps for failover
+## Platform Integration
 
-## Debugging
+DNS stamp support can be integrated at various levels:
 
-For operational debugging, implementations should:
+### Operating System Level
+- System resolver configuration
+- Network configuration tools
+- VPN client integration
 
-1. Log the decoded contents of stamps
-2. Provide tools to decode stamps manually
-3. Include stamp details in error messages
-4. Support verbose modes showing connection attempts
+### Application Level
+- Web browsers
+- DNS proxy software
+- Network diagnostic tools
+
+### Library Level
+- DNS client libraries
+- HTTP client libraries
+- Security frameworks
+
+## Performance Optimization
+
+### Caching
+
+Implementations SHOULD cache:
+- Decoded stamp data structures
+- Certificate validation results
+- Bootstrap resolver results
+- Connection state for persistent protocols
+
+### Connection Management
+
+- Reuse connections for multiple queries
+- Implement appropriate timeout strategies
+- Handle connection failures gracefully
+- Support connection pooling for concurrent queries
+
+## User Interface Considerations
+
+Applications SHOULD:
+- Display decoded stamp contents clearly
+- Allow copying stamps to clipboard
+- Support QR code generation/scanning
+- Provide stamp validation feedback
+- Show security properties prominently
+
+## Debugging Support
+
+Implementations SHOULD provide:
+- Detailed logging of stamp parsing
+- Connection attempt diagnostics
+- Certificate validation details
+- Performance metrics
+- Error context for troubleshooting
 
 # IANA Considerations
 
-This document requests IANA to register the "sdns" URI scheme in the "Uniform Resource Identifier (URI) Schemes" registry:
+## DNS Stamps URI Scheme Registration
 
-Scheme name: sdns
+IANA is requested to register the "sdns" URI scheme in the "Uniform Resource Identifier (URI) Schemes" registry:
 
-Status: Provisional
+- **Scheme name**: sdns
+- **Status**: Permanent
+- **Applications/protocols**: DNS client applications using DNS Stamps
+- **Contact**: Frank Denis <fde@00f.net>
+- **Change controller**: IETF
+- **References**: This document
 
-Applications/protocols that use this scheme: DNS client applications using DNS Stamps for configuration
+## DNS Stamps Protocol Identifiers Registry
 
-Contact: Frank Denis <fde@00f.net>
+IANA is requested to create a new registry titled "DNS Stamps Protocol Identifiers" with the following registration procedure: Specification Required {{!RFC8126}}.
 
-Change controller: IETF
+Initial values:
 
-References: This document
+| Value     | Protocol                  | Reference     |
+| --------- | ------------------------- | ------------- |
+| 0x00      | Plain DNS                 | This document |
+| 0x01      | DNSCrypt                  | This document |
+| 0x02      | DNS-over-HTTPS            | This document |
+| 0x03      | DNS-over-TLS              | This document |
+| 0x04      | DNS-over-QUIC             | This document |
+| 0x05      | Oblivious DoH Target      | This document |
+| 0x06-0x7F | Unassigned                |               |
+| 0x80      | Reserved                  | This document |
+| 0x81      | Anonymized DNSCrypt Relay | This document |
+| 0x82-0x84 | Unassigned                |               |
+| 0x85      | Oblivious DoH Relay       | This document |
+| 0x86-0xFF | Unassigned                |               |
 
-This document also requests IANA to create a new registry titled "DNS Stamps Protocol Identifiers" with the following initial values:
+## DNS Stamps Properties Registry
 
-| Value | Protocol | Reference |
-|-------|----------|-----------|
-| 0x00  | Plain DNS | This document |
-| 0x01  | DNSCrypt | This document |
-| 0x02  | DNS-over-HTTPS | This document |
-| 0x03  | DNS-over-TLS | This document |
-| 0x04  | DNS-over-QUIC | This document |
-| 0x05  | Oblivious DoH Target | This document |
-| 0x06-0x7F | Unassigned | |
-| 0x80  | Reserved for relay protocols | This document |
-| 0x81  | Anonymized DNSCrypt Relay | This document |
-| 0x82-0x84 | Unassigned | |
-| 0x85  | Oblivious DoH Relay | This document |
-| 0x86-0xFF | Unassigned | |
+IANA is requested to create a new registry titled "DNS Stamps Properties" with the following registration procedure: Specification Required {{!RFC8126}}.
 
-Registration policy: Specification Required
+Initial values:
 
-This document also requests IANA to create a new registry titled "DNS Stamps Properties Flags" with the following initial values:
-
-| Bit | Property | Reference |
-|-----|----------|-----------|
-| 0   | DNSSEC | This document |
-| 1   | No Logs | This document |
-| 2   | No Filter | This document |
-| 3-63 | Unassigned | |
-
-Registration policy: Specification Required
-
+| Bit  | Property   | Reference     |
+| ---- | ---------- | ------------- |
+| 0    | DNSSEC     | This document |
+| 1    | No Logs    | This document |
+| 2    | No Filter  | This document |
+| 3-63 | Unassigned |               |
 
 --- back
+
+# Complete Examples
+
+This appendix provides complete examples of DNS stamp encoding with step-by-step explanations.
+
+## Example 1: Plain DNS
+
+Configuration:
+- Server: 8.8.8.8
+- Port: 53 (default)
+- Properties: DNSSEC (bit 0 set)
+
+Step-by-step encoding:
+
+1. Protocol identifier: `0x00`
+2. Properties: `0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00` (bit 0 set, little-endian)
+3. LP("8.8.8.8"): `0x07` + `"8.8.8.8"` = `0x07 0x38 0x2E 0x38 0x2E 0x38 0x2E 0x38`
+4. Concatenate: `0x00 0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x07 0x38 0x2E 0x38 0x2E 0x38 0x2E 0x38`
+5. Base64url encode: `AAEAAAAAAAAABzguOC44Ljg`
+6. Final stamp: `sdns://AAEAAAAAAAAABzguOC44Ljg`
+
+## Example 2: DNSCrypt
+
+Configuration:
+- Server: 185.121.177.177
+- Port: 5553
+- Provider public key: `e801...bf82` (32 bytes)
+- Provider name: 2.dnscrypt-cert.scaleway-fr
+- Properties: DNSSEC, No logs, No filter (bits 0, 1, 2 set)
+
+Step-by-step encoding:
+
+1. Protocol identifier: `0x01`
+2. Properties: `0x07 0x00 0x00 0x00 0x00 0x00 0x00 0x00`
+3. LP("185.121.177.177:5553"): `0x14` + address
+4. LP(public key): `0x20` + 32 bytes of key
+5. LP("2.dnscrypt-cert.scaleway-fr"): `0x1B` + provider name
+6. Concatenate all components
+7. Base64url encode
+8. Final stamp: `sdns://AQcAAAAAAAAAEjE4NS4xMjEuMTc3LjE3Nzo1NTUzIOgBsd...`
+
+## Example 3: DNS-over-HTTPS
+
+Configuration:
+- Hostname: cloudflare-dns.com
+- Path: /dns-query
+- No specific IP address
+- Certificate hash: `3b7f...b663` (32 bytes)
+- Properties: No logs (bit 1 set)
+
+Step-by-step encoding:
+
+1. Protocol identifier: `0x02`
+2. Properties: `0x02 0x00 0x00 0x00 0x00 0x00 0x00 0x00`
+3. LP(""): `0x00` (empty address)
+4. VLP(cert hash): Since it's the only hash, same as LP: `0x20` + 32 bytes
+5. LP("cloudflare-dns.com"): `0x12` + hostname
+6. LP("/dns-query"): `0x0A` + path
+7. No bootstrap IPs
+8. Concatenate, base64url encode
+9. Final stamp: `sdns://AgIAAAAAAAAAAAASY2xvdWRmbGFyZS1kbnMuY29tCi9kbnMtcXVlcnk`
+
+# Test Vectors
+
+This appendix provides test vectors for validating DNS stamp implementations.
+
+## Test Vector 1: Plain DNS with IPv6
+
+~~~
+Input:
+  Protocol: Plain DNS
+  Address: [2001:db8::1]:53
+  Properties: DNSSEC
+
+Encoded stamp:
+  sdns://AAEAAAAAAAAADlsyMDAxOmRiODo6MV0
+
+Decoded:
+  Protocol ID: 0x00
+  Properties: 0x0100000000000000
+  Address: "[2001:db8::1]"
+~~~
+
+## Test Vector 2: DoH with Multiple Certificate Hashes
+
+~~~
+Input:
+  Protocol: DNS-over-HTTPS
+  Hostname: dns.example.com
+  Path: /dns-query
+  Cert Hash 1: 1111111111111111111111111111111111111111111111111111111111111111
+  Cert Hash 2: 2222222222222222222222222222222222222222222222222222222222222222
+  Properties: None
+
+Encoded stamp:
+  sdns://AgAAAAAAAAAAACCRERERERERERERERERERERERERERERERERERERERERESAiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiD2Rucy5leGFtcGxlLmNvbQovZG5zLXF1ZXJ5
+
+Decoded:
+  Protocol ID: 0x02
+  Properties: 0x0000000000000000
+  Address: ""
+  Hash count: 2
+  Hash 1: 1111111111111111111111111111111111111111111111111111111111111111
+  Hash 2: 2222222222222222222222222222222222222222222222222222222222222222
+  Hostname: "dns.example.com"
+  Path: "/dns-query"
+~~~
+
+## Test Vector 3: DoT with Bootstrap
+
+~~~
+Input:
+  Protocol: DNS-over-TLS
+  Hostname: dot.example.com:853
+  Address: 192.0.2.1
+  Bootstrap: 198.51.100.1, 203.0.113.1
+  Properties: No logs, No filter
+
+Encoded stamp:
+  sdns://AwYAAAAAAAAACTE5Mi4wLjIuMQAPZG90LmV4YW1wbGUuY29tCwwxOTguNTEuMTAwLjELMjAzLjAuMTEzLjE
+
+Decoded:
+  Protocol ID: 0x03
+  Properties: 0x0600000000000000
+  Address: "192.0.2.1"
+  No certificate hashes
+  Hostname: "dot.example.com:853"
+  Bootstrap count: 2
+  Bootstrap 1: "198.51.100.1"
+  Bootstrap 2: "203.0.113.1"
+~~~
 
 # Implementation Status
 
 {:numbered="false"}
 
-This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in RFC 7942.
+This section records the status of known implementations of DNS stamps.
 
 ## dnscrypt-proxy
 
-Organization: Frank Denis
-
-Description: A flexible DNS proxy supporting all DNS stamp types
-
-Maturity: Production
-
-Coverage: Complete
-
-License: ISC
-
-Implementation experience: Excellent
+- **Organization**: Frank Denis
+- **Description**: Flexible DNS proxy with comprehensive stamp support
+- **Maturity**: Production
+- **Coverage**: All stamp types
+- **License**: ISC
+- **URL**: https://github.com/dnscrypt/dnscrypt-proxy
 
 ## AdGuard
 
-Organization: AdGuard Software Ltd
-
-Description: Cross-platform ad blocker with DNS protection
-
-Maturity: Production
-
-Coverage: Supports main stamp types (DNSCrypt, DoH, DoT, DoQ)
-
-License: Proprietary
-
-Implementation experience: Good
+- **Organization**: AdGuard Software Limited
+- **Description**: DNS privacy protection software
+- **Maturity**: Production
+- **Coverage**: DNSCrypt, DoH, DoT, DoQ
+- **License**: Proprietary
+- **URL**: https://adguard.com
 
 ## Simple DNSCrypt
 
-Organization: Christian Hermann
+- **Organization**: Christian Hermann
+- **Description**: Windows GUI for dnscrypt-proxy
+- **Maturity**: Production
+- **Coverage**: All stamp types via dnscrypt-proxy
+- **License**: MIT
+- **URL**: https://simplednscrypt.org
 
-Description: Simple management tool for dnscrypt-proxy on Windows
+## YogaDNS
 
-Maturity: Production
-
-Coverage: Complete
-
-License: MIT
-
-Implementation experience: Good
-
-# Test Vectors
-
-{:numbered="false"}
-
-This appendix provides test vectors for DNS stamp encoding and decoding.
-
-## Plain DNS Test Vector
-
-Input:
-- Protocol: Plain DNS (0x00)
-- Properties: DNSSEC (0x01)
-- Address: 8.8.8.8
-
-Encoded stamp:
-~~~
-sdns://AAEAAAAAAAAABzguOC44Ljg
-~~~
-
-## DNSCrypt Test Vector
-
-Input:
-- Protocol: DNSCrypt (0x01)
-- Properties: DNSSEC, No logs, No filter (0x07)
-- Address: 176.103.130.130:5443
-- Public key (hex): f1b92957c00586a7db2d4c8f1d60c4ec5975c2a3b87bfb3d967c4c5724ad8272
-- Provider name: 2.dnscrypt-cert.example
-
-Encoded stamp:
-~~~
-sdns://AQcAAAAAAAAAEjE3Ni4xMDMuMTMwLjEzMDo1NDQzIPG5KVfABYan2y1Mjx1gxOxZdcKjuHv7PZZ8TFckrYJyFzIuZG5zY3J5cHQtY2VydC5leGFtcGxl
-~~~
-
-## DNS-over-HTTPS Test Vector
-
-Input:
-- Protocol: DoH (0x02)
-- Properties: No logs (0x02)
-- Address: (empty)
-- Certificate hash (hex): 3b7f6faf59ee948f96b68c79aa2c0589b5c864f2331238f4fe2f8dc7db6ab663
-- Hostname: cloudflare-dns.com
-- Path: /dns-query
-
-Encoded stamp:
-~~~
-sdns://AgIAAAAAAAAAAAASY2xvdWRmbGFyZS1kbnMuY29tCi9kbnMtcXVlcnk
-~~~
-
-# Change Log
-
-{:numbered="false"}
-
-## Since draft-denis-dns-stamps-00
-
-- Initial version
+- **Organization**: YogaDNS
+- **Description**: Advanced DNS client for Windows
+- **Maturity**: Production
+- **Coverage**: DNSCrypt, DoH, DoT
+- **License**: Proprietary
+- **URL**: https://yogadns.com
 
 # Acknowledgments
 
 {:numbered="false"}
 
-The author would like to thank the dnscrypt-proxy community for their feedback and implementation experience with DNS stamps. Special thanks to the developers of the various DNS stamp implementations who have helped refine the format through practical deployment experience.
+The author would like to thank the DNSCrypt community for their extensive feedback and implementation experience. Special recognition goes to the developers of the various DNS stamp implementations who helped refine the format through practical deployment.
 
-Thanks also to the developers of secure DNS protocols (DNSCrypt, DoH, DoT, DoQ) whose work made DNS stamps necessary and useful.
+Thanks also to the teams behind secure DNS protocols - DNSCrypt, DoH, DoT, and DoQ - whose work made DNS stamps both necessary and useful. Their efforts to improve DNS privacy and security provided the foundation for this specification.
