@@ -21,13 +21,11 @@ author:
 
 normative:
   RFC1035:
-  RFC2119:
   RFC3986:
   RFC4648:
   RFC5280:
   RFC6125:
   RFC7858:
-  RFC8174:
   RFC8484:
   RFC9250:
 
@@ -53,7 +51,7 @@ This document specifies DNS Stamps, a compact format that encodes the informatio
 
 # Introduction
 
-The Domain Name System (DNS) has evolved significantly from its original design as specified in {{RFC1035}}. While traditional DNS operates over unencrypted UDP and TCP connections on port 53, modern DNS deployments increasingly use encrypted transports to provide confidentiality and integrity. These secure protocols include DNSCrypt {{DNSCRYPT}}, DNS-over-TLS (DoT) {{RFC7858}}, DNS-over-HTTPS (DoH) {{RFC8484}}, DNS-over-QUIC (DoQ) {{RFC9250}}, and Oblivious DNS-over-HTTPS {{ODOH}}.
+The Domain Name System (DNS) has evolved significantly from its original design as specified in {{RFC1035}}. While traditional DNS operates over unencrypted UDP and TCP connections on port `53`, modern DNS deployments increasingly use encrypted transports to provide confidentiality and integrity. These secure protocols include DNSCrypt {{DNSCRYPT}}, DNS-over-TLS (DoT) {{RFC7858}}, DNS-over-HTTPS (DoH) {{RFC8484}}, DNS-over-QUIC (DoQ) {{RFC9250}}, and Oblivious DNS-over-HTTPS {{ODOH}}.
 
 Each secure DNS protocol requires different configuration parameters. DNSCrypt needs a provider public key and provider name in addition to server addresses. DoH requires HTTPS endpoints and paths. DoT and DoQ need TLS configuration including certificate validation parameters. This diversity in configuration requirements creates significant challenges for both users and applications attempting to configure secure DNS resolvers.
 
@@ -84,7 +82,7 @@ Properties
 
 The following encoding primitives are used throughout this specification:
 
-`||`
+`‖`
 : Denotes concatenation of byte sequences.
 
 `|`
@@ -97,10 +95,10 @@ The following encoding primitives are used throughout this specification:
 : Variable length encoding. Equal to `len(x)` if `x` is the last element of a set. Otherwise equal to `(0x80 | len(x))`, indicating more elements follow.
 
 `LP(x)`
-: Length-prefixed encoding, defined as `len(x) || x`.
+: Length-prefixed encoding, defined as `len(x) ‖ x`.
 
 `VLP(x1, x2, ...xn)`
-: Variable-length-prefixed set encoding, defined as `vlen(x1) || x1 || vlen(x2) || x2 ... || vlen(xn) || xn`. For a single-element set, `VLP(x) == LP(x)`.
+: Variable-length-prefixed set encoding, defined as `vlen(x1) ‖ x1 ‖ vlen(x2) ‖ x2 ... ‖ vlen(xn) ‖ xn`. For a single-element set, `VLP(x) == LP(x)`.
 
 `[x]`
 : Denotes that `x` is optional and may be omitted.
@@ -127,7 +125,7 @@ The stamp begins with the scheme `sdns://` followed by a base64url-encoded paylo
 The general structure of the payload is:
 
 ~~~
-protocol_identifier || protocol_specific_data
+protocol_identifier ‖ protocol_specific_data
 ~~~
 
 The payload always begins with a single-byte protocol identifier that determines how to interpret the remaining bytes. The base64url encoding is applied to the entire payload as a single operation after concatenating all components.
@@ -173,7 +171,7 @@ Plain DNS stamps encode parameters for traditional unencrypted DNS resolvers.
 ### Format
 
 ~~~
-payload = 0x00 || props || LP(addr)
+payload = 0x00 ‖ props ‖ LP(addr)
 ~~~
 
 ### Fields
@@ -185,12 +183,12 @@ payload = 0x00 || props || LP(addr)
 : Properties field (8 bytes, little-endian).
 
 `addr`
-: IP address and optional port as a string. IPv6 addresses MUST be enclosed in square brackets. Default port is 53.
+: IP address and optional port as a string. IPv6 addresses MUST be enclosed in square brackets. Default port is `53`.
 
 ### Address Format
 
-- IPv4: `"192.0.2.1"` or `"192.0.2.1:5353"`
-- IPv6: `"[2001:db8::1]"` or `"[2001:db8::1]:5353"`
+- IPv4: `192.0.2.1` or `192.0.2.1:5353`
+- IPv6: `[2001:db8::1]` or `[2001:db8::1]:5353`
 
 ## DNSCrypt Stamps
 
@@ -199,7 +197,7 @@ DNSCrypt stamps encode parameters for DNSCrypt servers.
 ### Format
 
 ~~~
-payload = 0x01 || props || LP(addr) || LP(pk) || LP(provider_name)
+payload = 0x01 ‖ props ‖ LP(addr) ‖ LP(pk) ‖ LP(provider_name)
 ~~~
 
 ### Fields
@@ -211,13 +209,13 @@ payload = 0x01 || props || LP(addr) || LP(pk) || LP(provider_name)
 : Properties field (8 bytes, little-endian).
 
 `addr`
-: IP address and optional port. IPv6 addresses MUST be enclosed in square brackets. Default port is 443.
+: IP address and optional port. IPv6 addresses MUST be enclosed in square brackets. Default port is `443`.
 
 `pk`
 : Provider's Ed25519 public key (exactly 32 bytes, raw binary format).
 
 `provider_name`
-: DNSCrypt provider name (e.g., `"2.dnscrypt-cert.example.com"`).
+: DNSCrypt provider name (e.g., `2.dnscrypt-cert.example.com`).
 
 ### Requirements
 
@@ -232,8 +230,8 @@ DoH stamps encode parameters for DNS-over-HTTPS servers.
 ### Format
 
 ~~~
-payload = 0x02 || props || LP(addr) || VLP(hash1, ..., hashn) ||
-          LP(hostname) || LP(path) [ || VLP(bootstrap1, ..., bootstrapn) ]
+payload = 0x02 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
+          LP(hostname) ‖ LP(path) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 ~~~
 
 ### Fields
@@ -251,10 +249,10 @@ payload = 0x02 || props || LP(addr) || VLP(hash1, ..., hashn) ||
 : SHA256 digests of certificates in the validation chain (each exactly 32 bytes).
 
 `hostname`
-: Server hostname with optional port. Default port is 443.
+: Server hostname with optional port. Default port is `443`.
 
 `path`
-: Absolute URI path (e.g., `"/dns-query"`).
+: Absolute URI path (e.g., `/dns-query`).
 
 `bootstrapi`
 : Optional IP addresses for resolving hostname.
@@ -273,8 +271,8 @@ DoT stamps encode parameters for DNS-over-TLS servers.
 ### Format
 
 ~~~
-payload = 0x03 || props || LP(addr) || VLP(hash1, ..., hashn) ||
-          LP(hostname) [ || VLP(bootstrap1, ..., bootstrapn) ]
+payload = 0x03 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
+          LP(hostname) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 ~~~
 
 ### Fields
@@ -284,7 +282,7 @@ payload = 0x03 || props || LP(addr) || VLP(hash1, ..., hashn) ||
 
 Other fields have the same meaning as DoH stamps, except:
 
-- Default port is 853.
+- Default port is `853`.
 - No path field is included.
 
 ## DNS-over-QUIC Stamps
@@ -294,8 +292,8 @@ DoQ stamps encode parameters for DNS-over-QUIC servers.
 ### Format
 
 ~~~
-payload = 0x04 || props || LP(addr) || VLP(hash1, ..., hashn) ||
-          LP(hostname) [ || VLP(bootstrap1, ..., bootstrapn) ]
+payload = 0x04 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
+          LP(hostname) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 ~~~
 
 ### Fields
@@ -312,7 +310,7 @@ ODoH target stamps encode parameters for Oblivious DoH target servers.
 ### Format
 
 ~~~
-payload = 0x05 || props || LP(hostname) || LP(path)
+payload = 0x05 ‖ props ‖ LP(hostname) ‖ LP(path)
 ~~~
 
 ### Fields
@@ -324,7 +322,7 @@ payload = 0x05 || props || LP(hostname) || LP(path)
 : Properties field (8 bytes, little-endian).
 
 `hostname`
-: Server hostname with optional port. Default port is 443.
+: Server hostname with optional port. Default port is `443`.
 
 `path`
 : Absolute URI path.
@@ -336,7 +334,7 @@ DNSCrypt relay stamps encode parameters for anonymization relays.
 ### Format
 
 ~~~
-payload = 0x81 || LP(addr)
+payload = 0x81 ‖ LP(addr)
 ~~~
 
 ### Fields
@@ -354,8 +352,8 @@ ODoH relay stamps encode parameters for Oblivious DoH relays.
 ### Format
 
 ~~~
-payload = 0x85 || props || LP(addr) || VLP(hash1, ..., hashn) ||
-          LP(hostname) || LP(path) [ || VLP(bootstrap1, ..., bootstrapn) ]
+payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
+          LP(hostname) ‖ LP(path) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 ~~~
 
 ### Fields
@@ -425,8 +423,8 @@ Implementations SHOULD provide descriptive error messages indicating the specifi
 
 - IP addresses MUST be valid IPv4 or IPv6 addresses.
 - Hostnames MUST be valid DNS names.
-- Ports MUST be in the range 1-65535.
-- Paths MUST begin with "/".
+- Ports MUST be in the range `1-65535`.
+- Paths MUST begin with `/`.
 
 ### Semantic Validation
 
@@ -605,46 +603,46 @@ This appendix provides complete examples of DNS stamp encoding with step-by-step
 
 Configuration:
 
-- Server: 8.8.8.8
-- Port: 53 (default)
+- Server: `192.0.2.53`
+- Port: `53` (default)
 - Properties: DNSSEC (bit 0 set)
 
 Step-by-step encoding:
 
 1. Protocol identifier: `0x00`
 2. Properties: `0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00` (bit 0 set, little-endian)
-3. LP("8.8.8.8"): `0x07` + `"8.8.8.8"` = `0x07 0x38 0x2E 0x38 0x2E 0x38 0x2E 0x38`
-4. Concatenate: `0x00 0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x07 0x38 0x2E 0x38 0x2E 0x38 0x2E 0x38`
-5. Base64url encode: `AAEAAAAAAAAABzguOC44Ljg`
-6. Final stamp: `sdns://AAEAAAAAAAAABzguOC44Ljg`
+3. LP("192.0.2.53"): 0x0A ‖ "192.0.2.53" = 0x0A 0x31 0x39 0x32 0x2E 0x30 0x2E 0x32 0x2E 0x35 0x33
+4. Concatenate: `0x00 0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x0A 0x31 0x39 0x32 0x2E 0x30 0x2E 0x32 0x2E 0x35 0x33`
+5. Base64url encode: `AAEAAAAAAAAACjE5Mi4wLjIuNTM`
+6. Final stamp: `sdns://AAEAAAAAAAAACjE5Mi4wLjIuNTM`
 
 ## Example 2: DNSCrypt
 
 Configuration:
 
-- Server: 185.121.177.177
-- Port: 5553
+- Server: `198.51.100.1`
+- Port: `5553`
 - Provider public key: `e801...bf82` (32 bytes)
-- Provider name: 2.dnscrypt-cert.scaleway-fr
+- Provider name: `2.dnscrypt-cert.example.com`
 - Properties: DNSSEC, No logs, No filter (bits 0, 1, 2 set)
 
 Step-by-step encoding:
 
 1. Protocol identifier: `0x01`
 2. Properties: `0x07 0x00 0x00 0x00 0x00 0x00 0x00 0x00`
-3. LP("185.121.177.177:5553"): `0x14` + address
-4. LP(public key): `0x20` + 32 bytes of key
-5. LP("2.dnscrypt-cert.scaleway-fr"): `0x1B` + provider name
+3. LP("198.51.100.1:5553"): 0x11 ‖ address
+4. LP(public key): 0x20 ‖ 32 bytes of key
+5. LP("2.dnscrypt-cert.example.com"): 0x1B ‖ provider name
 6. Concatenate all components
 7. Base64url encode
-8. Final stamp: `sdns://AQcAAAAAAAAAEjE4NS4xMjEuMTc3LjE3Nzo1NTUzIOgBsd...`
+8. Final stamp: `sdns://AQcAAAAAAAAAETE5OC41MS4xMDAuMTo1NTUzIOgBsd...`
 
 ## Example 3: DNS-over-HTTPS
 
 Configuration:
 
-- Hostname: cloudflare-dns.com
-- Path: /dns-query
+- Hostname: `dns.example.com`
+- Path: `/dns-query`
 - No specific IP address
 - Certificate hash: `3b7f...b663` (32 bytes)
 - Properties: No logs (bit 1 set)
@@ -653,13 +651,13 @@ Step-by-step encoding:
 
 1. Protocol identifier: `0x02`
 2. Properties: `0x02 0x00 0x00 0x00 0x00 0x00 0x00 0x00`
-3. LP(""): `0x00` (empty address)
-4. VLP(cert hash): Since it's the only hash, same as LP: `0x20` + 32 bytes
-5. LP("cloudflare-dns.com"): `0x12` + hostname
-6. LP("/dns-query"): `0x0A` + path
+3. LP(""): 0x00 (empty address)
+4. VLP(cert hash): Since it's the only hash, same as LP: 0x20 ‖ 32 bytes
+5. LP("dns.example.com"): 0x0F ‖ hostname
+6. LP("/dns-query"): 0x0A ‖ path
 7. No bootstrap IPs
 8. Concatenate, base64url encode
-9. Final stamp: `sdns://AgIAAAAAAAAAAAASY2xvdWRmbGFyZS1kbnMuY29tCi9kbnMtcXVlcnk`
+9. Final stamp: `sdns://AgIAAAAAAAAAAAAAD2Rucy5leGFtcGxlLmNvbQovZG5zLXF1ZXJ5`
 
 # Test Vectors
 
