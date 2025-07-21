@@ -546,6 +546,7 @@ DNS stamp support can be integrated at various levels:
 ### Caching
 
 Implementations SHOULD cache:
+
 - Decoded stamp data structures
 - Certificate validation results
 - Bootstrap resolver results
