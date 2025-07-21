@@ -1,0 +1,7 @@
+<note title="Discussion Venues" removeInRFC="true">
+<t>Discussion of this document takes place on the
+    Domain Name System Working Group mailing list (namedroppers@nic.ddn.mil),
+    which is archived at <eref target="nicfs.nic.ddn.mil:~/namedroppers/*.Z"/>.</t>
+<t>Source for this draft and an issue tracker can be found at
+    <eref target="https://github.com/DNSCrypt/draft-denis-dns-stamps"/>.</t>
+</note>
