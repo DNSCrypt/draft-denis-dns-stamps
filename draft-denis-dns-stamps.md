@@ -756,8 +756,6 @@ Decoded:
 
 # Implementation Status
 
-{:numbered="false"}
-
 This section records the status of known implementations of DNS stamps.
 
 ## dnscrypt-proxy
@@ -797,8 +795,6 @@ This section records the status of known implementations of DNS stamps.
 - **URL**: https://yogadns.com
 
 # Acknowledgments
-
-{:numbered="false"}
 
 The author would like to thank the DNSCrypt community for their extensive feedback and implementation experience. Special recognition goes to the developers of the various DNS stamp implementations who helped refine the format through practical deployment.
 
