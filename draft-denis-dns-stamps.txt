@@ -766,9 +766,15 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 
 7.2.1.  Caching
 
-   Implementations SHOULD cache: - Decoded stamp data structures -
-   Certificate validation results - Bootstrap resolver results -
-   Connection state for persistent protocols
+   Implementations SHOULD cache:
+
+   *  Decoded stamp data structures
+
+   *  Certificate validation results
+
+   *  Bootstrap resolver results
+
+   *  Connection state for persistent protocols
 
 7.2.2.  Connection Management
 
