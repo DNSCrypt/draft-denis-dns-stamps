@@ -636,11 +636,11 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 
 6.1.1.  Threats
 
-   *  *Substitution*: Replacing legitimate stamps with malicious ones
+   *  Substitution: Replacing legitimate stamps with malicious ones
 
-   *  *Modification*: Altering addresses, keys, or certificate hashes
+   *  Modification: Altering addresses, keys, or certificate hashes
 
-   *  *Downgrade*: Replacing secure protocol stamps with insecure ones
+   *  Downgrade: Replacing secure protocol stamps with insecure ones
 
 6.1.2.  Mitigations
 
@@ -690,11 +690,11 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 
    DNS stamps may reveal information about resolver configuration:
 
-   *  *Server Locations*: IP addresses indicate geographic regions
+   *  Server Locations: IP addresses indicate geographic regions
 
-   *  *Logging Policies*: Properties flags indicate data retention
+   *  Logging Policies: Properties flags indicate data retention
 
-   *  *Query Privacy*: Bootstrap resolvers may see some queries
+   *  Query Privacy: Bootstrap resolvers may see some queries
 
    Users should understand the privacy implications of their chosen
    resolvers.  Applications SHOULD display relevant properties clearly.
@@ -705,11 +705,11 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 
    Malformed stamps could trigger implementation vulnerabilities:
 
-   *  *Buffer Overflows*: Validate all lengths before allocation
+   *  Buffer Overflows: Validate all lengths before allocation
 
-   *  *Integer Overflows*: Check length calculations
+   *  Integer Overflows: Check length calculations
 
-   *  *Resource Exhaustion*: Limit maximum stamp size
+   *  Resource Exhaustion: Limit maximum stamp size
 
 6.4.2.  Cryptographic Safety
 
@@ -822,13 +822,13 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
    IANA is requested to register the “sdns” URI scheme in the “Uniform
    Resource Identifier (URI) Schemes” registry:
 
-   *  *Scheme name*: sdns
+   *  Scheme name: sdns
 
-   *  *Status*: Permanent
+   *  Status: Permanent
 
-   *  *Applications/protocols*: DNS client applications using DNS Stamps
+   *  Applications/protocols: DNS client applications using DNS Stamps
 
-   *  *Reference*: This document
+   *  Reference: This document
 
 9.  References
 

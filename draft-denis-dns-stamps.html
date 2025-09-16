@@ -2330,13 +2330,13 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
           </h4>
 <ul class="normal">
 <li class="normal" id="section-6.1.1-1.1">
-              <p id="section-6.1.1-1.1.1"><strong>Substitution</strong>: Replacing legitimate stamps with malicious ones<a href="#section-6.1.1-1.1.1" class="pilcrow">¶</a></p>
+              <p id="section-6.1.1-1.1.1">Substitution: Replacing legitimate stamps with malicious ones<a href="#section-6.1.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.1.1-1.2">
-              <p id="section-6.1.1-1.2.1"><strong>Modification</strong>: Altering addresses, keys, or certificate hashes<a href="#section-6.1.1-1.2.1" class="pilcrow">¶</a></p>
+              <p id="section-6.1.1-1.2.1">Modification: Altering addresses, keys, or certificate hashes<a href="#section-6.1.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.1.1-1.3">
-              <p id="section-6.1.1-1.3.1"><strong>Downgrade</strong>: Replacing secure protocol stamps with insecure ones<a href="#section-6.1.1-1.3.1" class="pilcrow">¶</a></p>
+              <p id="section-6.1.1-1.3.1">Downgrade: Replacing secure protocol stamps with insecure ones<a href="#section-6.1.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -2425,13 +2425,13 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 <p id="section-6.3-1">DNS stamps may reveal information about resolver configuration:<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3-2.1">
-            <p id="section-6.3-2.1.1"><strong>Server Locations</strong>: IP addresses indicate geographic regions<a href="#section-6.3-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-6.3-2.1.1">Server Locations: IP addresses indicate geographic regions<a href="#section-6.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.3-2.2">
-            <p id="section-6.3-2.2.1"><strong>Logging Policies</strong>: Properties flags indicate data retention<a href="#section-6.3-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.3-2.2.1">Logging Policies: Properties flags indicate data retention<a href="#section-6.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.3-2.3">
-            <p id="section-6.3-2.3.1"><strong>Query Privacy</strong>: Bootstrap resolvers may see some queries<a href="#section-6.3-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-6.3-2.3.1">Query Privacy: Bootstrap resolvers may see some queries<a href="#section-6.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-6.3-3">Users should understand the privacy implications of their chosen resolvers. Applications <span class="bcp14">SHOULD</span> display relevant properties clearly.<a href="#section-6.3-3" class="pilcrow">¶</a></p>
@@ -2450,13 +2450,13 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 <p id="section-6.4.1-1">Malformed stamps could trigger implementation vulnerabilities:<a href="#section-6.4.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.4.1-2.1">
-              <p id="section-6.4.1-2.1.1"><strong>Buffer Overflows</strong>: Validate all lengths before allocation<a href="#section-6.4.1-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-6.4.1-2.1.1">Buffer Overflows: Validate all lengths before allocation<a href="#section-6.4.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.4.1-2.2">
-              <p id="section-6.4.1-2.2.1"><strong>Integer Overflows</strong>: Check length calculations<a href="#section-6.4.1-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-6.4.1-2.2.1">Integer Overflows: Check length calculations<a href="#section-6.4.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.4.1-2.3">
-              <p id="section-6.4.1-2.3.1"><strong>Resource Exhaustion</strong>: Limit maximum stamp size<a href="#section-6.4.1-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-6.4.1-2.3.1">Resource Exhaustion: Limit maximum stamp size<a href="#section-6.4.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -2685,16 +2685,16 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 <p id="section-8.1-1">IANA is requested to register the “sdns” URI scheme in the “Uniform Resource Identifier (URI) Schemes” registry:<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-8.1-2.1">
-            <p id="section-8.1-2.1.1"><strong>Scheme name</strong>: sdns<a href="#section-8.1-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-8.1-2.1.1">Scheme name: sdns<a href="#section-8.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.1-2.2">
-            <p id="section-8.1-2.2.1"><strong>Status</strong>: Permanent<a href="#section-8.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-8.1-2.2.1">Status: Permanent<a href="#section-8.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.1-2.3">
-            <p id="section-8.1-2.3.1"><strong>Applications/protocols</strong>: DNS client applications using DNS Stamps<a href="#section-8.1-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-8.1-2.3.1">Applications/protocols: DNS client applications using DNS Stamps<a href="#section-8.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.1-2.4">
-            <p id="section-8.1-2.4.1"><strong>Reference</strong>: This document<a href="#section-8.1-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-8.1-2.4.1">Reference: This document<a href="#section-8.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
