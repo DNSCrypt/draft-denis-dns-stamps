@@ -47,7 +47,7 @@ This document specifies DNS Stamps, a compact format that encodes the informatio
 
 # Introduction
 
-The Domain Name System (DNS) has evolved significantly from its original design as specified in {{RFC1035}}. While traditional DNS operates over unencrypted UDP and TCP connections on port `53`, modern DNS deployments increasingly use encrypted transports to provide confidentiality and integrity. These secure protocols include DNSCrypt {{!I-D.draft-denis-dprive-dnscrypt}}, DNS-over-TLS (DoT) {{RFC7858}}, DNS-over-HTTPS (DoH) {{RFC8484}}, DNS-over-QUIC (DoQ) {{RFC9250}}, and Oblivious DNS-over-HTTPS {{ODOH}}.
+The Domain Name System (DNS) has evolved significantly from its original design as specified in {{RFC1035}}. While traditional DNS operates over unencrypted UDP and TCP connections on port `53`, modern DNS deployments increasingly use encrypted transports to provide confidentiality and integrity. These secure protocols include DNSCrypt {{!I-D.denis-dprive-dnscrypt}}, DNS-over-TLS (DoT) {{RFC7858}}, DNS-over-HTTPS (DoH) {{RFC8484}}, DNS-over-QUIC (DoQ) {{RFC9250}}, and Oblivious DNS-over-HTTPS {{ODOH}}.
 
 Each secure DNS protocol requires different configuration parameters. DNSCrypt needs a provider public key and provider name in addition to server addresses. DoH requires HTTPS endpoints and paths. DoT and DoQ need TLS configuration including certificate validation parameters. This diversity in configuration requirements creates significant challenges for both users and applications attempting to configure secure DNS resolvers.
 
@@ -241,7 +241,7 @@ payload = 0x02 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 `addr`
 : IP address of the server. May be empty string if hostname resolution is required.
 
-`hashi`
+`hash1, ..., hashn`
 : SHA256 digests of certificates in the validation chain (each exactly 32 bytes).
 
 `hostname`
@@ -250,7 +250,7 @@ payload = 0x02 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 `path`
 : Absolute URI path (e.g., `/dns-query`).
 
-`bootstrapi`
+`bootstrap1, ..., bootstrapn`
 : Optional IP addresses for resolving hostname.
 
 ### Requirements
@@ -588,8 +588,8 @@ IANA is requested to register the "sdns" URI scheme in the "Uniform Resource Ide
 - **Scheme name**: sdns
 - **Status**: Permanent
 - **Applications/protocols**: DNS client applications using DNS Stamps
-- **References**: This document
-         |
+- **Reference**: This document
+
 --- back
 
 # Complete Examples
