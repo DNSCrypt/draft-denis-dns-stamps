@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                    Individual Contributor
-Intended status: Standards Track                            21 July 2025
-Expires: 22 January 2026
+Intended status: Standards Track                       16 September 2025
+Expires: 20 March 2026
 
 
                       The DNS Stamps Specification
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 January 2026.
+   This Internet-Draft will expire on 20 March 2026.
 
 Copyright Notice
 
@@ -157,9 +157,9 @@ Table of Contents
    operates over unencrypted UDP and TCP connections on port 53, modern
    DNS deployments increasingly use encrypted transports to provide
    confidentiality and integrity.  These secure protocols include
-   DNSCrypt [I-D.draft-denis-dprive-dnscrypt], DNS-over-TLS (DoT)
-   [RFC7858], DNS-over-HTTPS (DoH) [RFC8484], DNS-over-QUIC (DoQ)
-   [RFC9250], and Oblivious DNS-over-HTTPS [ODOH].
+   DNSCrypt [I-D.denis-dprive-dnscrypt], DNS-over-TLS (DoT) [RFC7858],
+   DNS-over-HTTPS (DoH) [RFC8484], DNS-over-QUIC (DoQ) [RFC9250], and
+   Oblivious DNS-over-HTTPS [ODOH].
 
    Each secure DNS protocol requires different configuration parameters.
    DNSCrypt needs a provider public key and provider name in addition to
@@ -410,14 +410,15 @@ payload = 0x02 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
    addr  IP address of the server.  May be empty string if hostname
       resolution is required.
 
-   hashi  SHA256 digests of certificates in the validation chain (each
-      exactly 32 bytes).
+   hash1, ..., hashn  SHA256 digests of certificates in the validation
+      chain (each exactly 32 bytes).
 
    hostname  Server hostname with optional port.  Default port is 443.
 
    path  Absolute URI path (e.g., /dns-query).
 
-   bootstrapi  Optional IP addresses for resolving hostname.
+   bootstrap1, ..., bootstrapn  Optional IP addresses for resolving
+      hostname.
 
 4.3.3.  Requirements
 
@@ -827,13 +828,13 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 
    *  *Applications/protocols*: DNS client applications using DNS Stamps
 
-   *  *References*: This document |
+   *  *Reference*: This document
 
 9.  References
 
 9.1.  Normative References
 
-   [I-D.draft-denis-dprive-dnscrypt]
+   [I-D.denis-dprive-dnscrypt]
               Denis, F., "The DNSCrypt Protocol", Work in Progress,
               Internet-Draft, draft-denis-dprive-dnscrypt-06, 15 April
               2025, <https://datatracker.ietf.org/doc/html/draft-denis-

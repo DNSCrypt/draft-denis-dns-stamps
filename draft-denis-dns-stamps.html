@@ -9,21 +9,21 @@
 <meta content="
        This document specifies DNS Stamps, a compact format that encodes the information needed to connect to DNS resolvers. DNS Stamps encode all necessary parameters including addresses, hostnames, cryptographic keys, and protocol-specific configuration into a single string using a standard URI format. The specification supports multiple secure DNS protocols including DNSCrypt, DNS-over-HTTPS (DoH), DNS-over-TLS (DoT), DNS-over-QUIC (DoQ), and Oblivious DoH. 
     " name="description">
-<meta content="xml2rfc 3.30.0" name="generator">
+<meta content="xml2rfc 3.30.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-denis-dns-stamps-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.30.0
+  xml2rfc 3.30.1
     Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
     lxml 5.3.1
-    platformdirs 4.3.8
+    platformdirs 4.4.0
     pycountry 24.6.1
     PyYAML 6.0.2
-    requests 2.32.4
+    requests 2.32.5
     setuptools 80.9.0
     wcwidth 0.2.13
 -->
@@ -1044,11 +1044,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">DNS Stamps</td>
-<td class="right">July 2025</td>
+<td class="right">September 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Denis</td>
-<td class="center">Expires 22 January 2026</td>
+<td class="center">Expires 20 March 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1061,12 +1061,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-denis-dns-stamps-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-07-21" class="published">21 July 2025</time>
+<time datetime="2025-09-16" class="published">16 September 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-01-22">22 January 2026</time></dd>
+<dd class="expires"><time datetime="2026-03-20">20 March 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1111,7 +1111,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 22 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1453,7 +1453,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">The Domain Name System (DNS) has evolved significantly from its original design as specified in <span>[<a href="#RFC1035" class="cite xref">RFC1035</a>]</span>. While traditional DNS operates over unencrypted UDP and TCP connections on port <code>53</code>, modern DNS deployments increasingly use encrypted transports to provide confidentiality and integrity. These secure protocols include DNSCrypt <span>[<a href="#I-D.draft-denis-dprive-dnscrypt" class="cite xref">I-D.draft-denis-dprive-dnscrypt</a>]</span>, DNS-over-TLS (DoT) <span>[<a href="#RFC7858" class="cite xref">RFC7858</a>]</span>, DNS-over-HTTPS (DoH) <span>[<a href="#RFC8484" class="cite xref">RFC8484</a>]</span>, DNS-over-QUIC (DoQ) <span>[<a href="#RFC9250" class="cite xref">RFC9250</a>]</span>, and Oblivious DNS-over-HTTPS <span>[<a href="#ODOH" class="cite xref">ODOH</a>]</span>.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">The Domain Name System (DNS) has evolved significantly from its original design as specified in <span>[<a href="#RFC1035" class="cite xref">RFC1035</a>]</span>. While traditional DNS operates over unencrypted UDP and TCP connections on port <code>53</code>, modern DNS deployments increasingly use encrypted transports to provide confidentiality and integrity. These secure protocols include DNSCrypt <span>[<a href="#I-D.denis-dprive-dnscrypt" class="cite xref">I-D.denis-dprive-dnscrypt</a>]</span>, DNS-over-TLS (DoT) <span>[<a href="#RFC7858" class="cite xref">RFC7858</a>]</span>, DNS-over-HTTPS (DoH) <span>[<a href="#RFC8484" class="cite xref">RFC8484</a>]</span>, DNS-over-QUIC (DoQ) <span>[<a href="#RFC9250" class="cite xref">RFC9250</a>]</span>, and Oblivious DNS-over-HTTPS <span>[<a href="#ODOH" class="cite xref">ODOH</a>]</span>.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">Each secure DNS protocol requires different configuration parameters. DNSCrypt needs a provider public key and provider name in addition to server addresses. DoH requires HTTPS endpoints and paths. DoT and DoQ need TLS configuration including certificate validation parameters. This diversity in configuration requirements creates significant challenges for both users and applications attempting to configure secure DNS resolvers.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Current approaches to DNS configuration suffer from several limitations. Operating system interfaces typically support only IP addresses for DNS servers, providing no mechanism to specify encryption protocols or authentication parameters. Application-specific configuration files lack standardization, making it difficult to share configurations across different DNS client implementations. Manual configuration is error-prone, particularly when dealing with cryptographic parameters like public keys or certificate hashes. There is no standard way to distribute complete resolver configurations that would enable users to easily switch between different secure DNS providers.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">DNS Stamps address these challenges by encoding all parameters required to connect to a DNS resolver into a single, compact string using a URI format. This approach enables simple sharing of resolver configurations through copy-paste, QR codes, or URLs. It provides a consistent format across different client implementations, reduces configuration errors through format validation, and supports multiple protocols through a unified specification. DNS Stamps have been implemented in numerous DNS client applications and are used by several public DNS resolver operators to publish their server configurations.<a href="#section-1-4" class="pilcrow">¶</a></p>
@@ -1861,7 +1861,7 @@ payload = 0x02 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
               <p id="section-4.3.2-1.6.1">IP address of the server. May be empty string if hostname resolution is required.<a href="#section-4.3.2-1.6.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
-<dt id="section-4.3.2-1.7"><code>hashi</code></dt>
+<dt id="section-4.3.2-1.7"><code>hash1, ..., hashn</code></dt>
             <dd style="margin-left: 1.5em" id="section-4.3.2-1.8">
               <p id="section-4.3.2-1.8.1">SHA256 digests of certificates in the validation chain (each exactly 32 bytes).<a href="#section-4.3.2-1.8.1" class="pilcrow">¶</a></p>
 </dd>
@@ -1876,7 +1876,7 @@ payload = 0x02 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
               <p id="section-4.3.2-1.12.1">Absolute URI path (e.g., <code>/dns-query</code>).<a href="#section-4.3.2-1.12.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
-<dt id="section-4.3.2-1.13"><code>bootstrapi</code></dt>
+<dt id="section-4.3.2-1.13"><code>bootstrap1, ..., bootstrapn</code></dt>
             <dd style="margin-left: 1.5em" id="section-4.3.2-1.14">
               <p id="section-4.3.2-1.14.1">Optional IP addresses for resolving hostname.<a href="#section-4.3.2-1.14.1" class="pilcrow">¶</a></p>
 </dd>
@@ -2694,8 +2694,7 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
             <p id="section-8.1-2.3.1"><strong>Applications/protocols</strong>: DNS client applications using DNS Stamps<a href="#section-8.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.1-2.4">
-            <p id="section-8.1-2.4.1"><strong>References</strong>: This document
-       |<a href="#section-8.1-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-8.1-2.4.1"><strong>Reference</strong>: This document<a href="#section-8.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -2713,7 +2712,7 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 <a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
-<dt id="I-D.draft-denis-dprive-dnscrypt">[I-D.draft-denis-dprive-dnscrypt]</dt>
+<dt id="I-D.denis-dprive-dnscrypt">[I-D.denis-dprive-dnscrypt]</dt>
         <dd>
 <span class="refAuthor">Denis, F.</span>, <span class="refTitle">"The DNSCrypt Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-denis-dprive-dnscrypt-06</span>, <time datetime="2025-04-15" class="refDate">15 April 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-denis-dprive-dnscrypt-06">https://datatracker.ietf.org/doc/html/draft-denis-dprive-dnscrypt-06</a>&gt;</span>. </dd>
 <dd class="break"></dd>
