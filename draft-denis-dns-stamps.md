@@ -446,9 +446,9 @@ DNS stamps contain security-critical configuration including server addresses, c
 
 ### Threats
 
-- **Substitution**: Replacing legitimate stamps with malicious ones
-- **Modification**: Altering addresses, keys, or certificate hashes
-- **Downgrade**: Replacing secure protocol stamps with insecure ones
+- Substitution: Replacing legitimate stamps with malicious ones
+- Modification: Altering addresses, keys, or certificate hashes
+- Downgrade: Replacing secure protocol stamps with insecure ones
 
 ### Mitigations
 
@@ -485,9 +485,9 @@ Implementations SHOULD:
 
 DNS stamps may reveal information about resolver configuration:
 
-- **Server Locations**: IP addresses indicate geographic regions
-- **Logging Policies**: Properties flags indicate data retention
-- **Query Privacy**: Bootstrap resolvers may see some queries
+- Server Locations: IP addresses indicate geographic regions
+- Logging Policies: Properties flags indicate data retention
+- Query Privacy: Bootstrap resolvers may see some queries
 
 Users should understand the privacy implications of their chosen resolvers. Applications SHOULD display relevant properties clearly.
 
@@ -497,9 +497,9 @@ Users should understand the privacy implications of their chosen resolvers. Appl
 
 Malformed stamps could trigger implementation vulnerabilities:
 
-- **Buffer Overflows**: Validate all lengths before allocation
-- **Integer Overflows**: Check length calculations
-- **Resource Exhaustion**: Limit maximum stamp size
+- Buffer Overflows: Validate all lengths before allocation
+- Integer Overflows: Check length calculations
+- Resource Exhaustion: Limit maximum stamp size
 
 ### Cryptographic Safety
 
@@ -585,10 +585,10 @@ Implementations SHOULD provide:
 
 IANA is requested to register the "sdns" URI scheme in the "Uniform Resource Identifier (URI) Schemes" registry:
 
-- **Scheme name**: sdns
-- **Status**: Permanent
-- **Applications/protocols**: DNS client applications using DNS Stamps
-- **Reference**: This document
+- Scheme name: sdns
+- Status: Permanent
+- Applications/protocols: DNS client applications using DNS Stamps
+- Reference: This document
 
 --- back
 
