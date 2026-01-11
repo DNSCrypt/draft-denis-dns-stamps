@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                    Individual Contributor
-Intended status: Standards Track                       16 September 2025
-Expires: 20 March 2026
+Intended status: Standards Track                         11 January 2026
+Expires: 15 July 2026
 
 
                       The DNS Stamps Specification
@@ -47,11 +47,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 March 2026.
+   This Internet-Draft will expire on 15 July 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -159,7 +159,7 @@ Table of Contents
    confidentiality and integrity.  These secure protocols include
    DNSCrypt [I-D.denis-dprive-dnscrypt], DNS-over-TLS (DoT) [RFC7858],
    DNS-over-HTTPS (DoH) [RFC8484], DNS-over-QUIC (DoQ) [RFC9250], and
-   Oblivious DNS-over-HTTPS [ODOH].
+   Oblivious DNS-over-HTTPS [RFC9230].
 
    Each secure DNS protocol requires different configuration parameters.
    DNSCrypt needs a provider public key and provider name in addition to
@@ -836,9 +836,9 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 
    [I-D.denis-dprive-dnscrypt]
               Denis, F., "The DNSCrypt Protocol", Work in Progress,
-              Internet-Draft, draft-denis-dprive-dnscrypt-06, 15 April
+              Internet-Draft, draft-denis-dprive-dnscrypt-07, 5 October
               2025, <https://datatracker.ietf.org/doc/html/draft-denis-
-              dprive-dnscrypt-06>.
+              dprive-dnscrypt-07>.
 
    [RFC1035]  Mockapetris, P., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
@@ -890,10 +890,6 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
               <https://www.rfc-editor.org/rfc/rfc9250>.
 
 9.2.  Informative References
-
-   [ODOH]     "Oblivious DNS over HTTPS", 2023,
-              <https://datatracker.ietf.org/doc/draft-pauly-dprive-
-              oblivious-doh/>.
 
    [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
               Text on Security Considerations", BCP 72, RFC 3552,
