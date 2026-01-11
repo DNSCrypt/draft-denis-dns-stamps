@@ -34,10 +34,6 @@ informative:
   RFC5116:
   RFC8310:
   RFC9230:
-  ODOH:
-    title: "Oblivious DNS over HTTPS"
-    target: "https://datatracker.ietf.org/doc/draft-pauly-dprive-oblivious-doh/"
-    date: 2023
 
 --- abstract
 
@@ -47,7 +43,7 @@ This document specifies DNS Stamps, a compact format that encodes the informatio
 
 # Introduction
 
-The Domain Name System (DNS) has evolved significantly from its original design as specified in {{RFC1035}}. While traditional DNS operates over unencrypted UDP and TCP connections on port `53`, modern DNS deployments increasingly use encrypted transports to provide confidentiality and integrity. These secure protocols include DNSCrypt {{!I-D.denis-dprive-dnscrypt}}, DNS-over-TLS (DoT) {{RFC7858}}, DNS-over-HTTPS (DoH) {{RFC8484}}, DNS-over-QUIC (DoQ) {{RFC9250}}, and Oblivious DNS-over-HTTPS {{ODOH}}.
+The Domain Name System (DNS) has evolved significantly from its original design as specified in {{RFC1035}}. While traditional DNS operates over unencrypted UDP and TCP connections on port `53`, modern DNS deployments increasingly use encrypted transports to provide confidentiality and integrity. These secure protocols include DNSCrypt {{!I-D.denis-dprive-dnscrypt}}, DNS-over-TLS (DoT) {{RFC7858}}, DNS-over-HTTPS (DoH) {{RFC8484}}, DNS-over-QUIC (DoQ) {{RFC9250}}, and Oblivious DNS-over-HTTPS {{RFC9230}}.
 
 Each secure DNS protocol requires different configuration parameters. DNSCrypt needs a provider public key and provider name in addition to server addresses. DoH requires HTTPS endpoints and paths. DoT and DoQ need TLS configuration including certificate validation parameters. This diversity in configuration requirements creates significant challenges for both users and applications attempting to configure secure DNS resolvers.
 
