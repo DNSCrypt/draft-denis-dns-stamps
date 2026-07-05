@@ -47,7 +47,7 @@ jobs:
     - name: "Upload to Datatracker"
       uses: martinthomson/i-d-template@v1
       with:
-        make: upload
+        make: "${{ startsWith(github.ref, 'refs/tags/') && format('versioned/.{0}.upload', github.ref_name) || 'upload' }}"
       env:
         UPLOAD_EMAIL: ${{ inputs.email }}
 
