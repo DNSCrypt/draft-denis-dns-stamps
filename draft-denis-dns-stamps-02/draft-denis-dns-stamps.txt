@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                    Individual Contributor
-Intended status: Standards Track                         11 January 2026
-Expires: 15 July 2026
+Intended status: Standards Track                             5 July 2026
+Expires: 6 January 2027
 
 
                       The DNS Stamps Specification
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 July 2026.
+   This Internet-Draft will expire on 6 January 2027.
 
 Copyright Notice
 
@@ -836,9 +836,9 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 
    [I-D.denis-dprive-dnscrypt]
               Denis, F., "The DNSCrypt Protocol", Work in Progress,
-              Internet-Draft, draft-denis-dprive-dnscrypt-07, 5 October
-              2025, <https://datatracker.ietf.org/doc/html/draft-denis-
-              dprive-dnscrypt-07>.
+              Internet-Draft, draft-denis-dprive-dnscrypt-10, 20 June
+              2026, <https://datatracker.ietf.org/doc/html/draft-denis-
+              dprive-dnscrypt-10>.
 
    [RFC1035]  Mockapetris, P., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
