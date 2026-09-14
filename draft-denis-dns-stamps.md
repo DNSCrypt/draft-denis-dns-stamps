@@ -5,12 +5,15 @@ docname: draft-denis-dns-stamps-latest
 category: std
 
 ipr: trust200902
-keyword: Internet-Draft
+keyword:
+  - DNS
+  - resolver configuration
+  - encrypted DNS
 submissionType: IETF
 
-stand_alone: yes
-smart_quotes: yes
 pi: [toc, sortrefs, symrefs]
+v: 3
+lang: en
 
 author:
  -
@@ -24,10 +27,10 @@ normative:
   RFC3986:
   RFC4648:
   RFC5280:
-  RFC6125:
   RFC7858:
   RFC8484:
   RFC9250:
+  RFC9525:
 
 informative:
   RFC3552:
@@ -37,13 +40,13 @@ informative:
 
 --- abstract
 
-This document specifies DNS Stamps, a compact format that encodes the information needed to connect to DNS resolvers. DNS Stamps encode all necessary parameters including addresses, hostnames, cryptographic keys, and protocol-specific configuration into a single string using a standard URI format. The specification supports multiple secure DNS protocols including DNSCrypt, DNS-over-HTTPS (DoH), DNS-over-TLS (DoT), DNS-over-QUIC (DoQ), and Oblivious DoH.
+This document specifies DNS Stamps, a compact format that encodes the information needed to connect to DNS resolvers. DNS Stamps encode all necessary parameters including addresses, hostnames, cryptographic keys, and protocol-specific configuration into a single string using a standard URI format. The specification supports multiple secure DNS protocols including DNSCrypt, DNS-over-HTTPS (DoH), DNS-over-TLS (DoT), DNS-over-QUIC (DoQ), and Oblivious DNS-over-HTTPS (ODoH).
 
 --- middle
 
 # Introduction
 
-The Domain Name System (DNS) has evolved significantly from its original design as specified in {{RFC1035}}. While traditional DNS operates over unencrypted UDP and TCP connections on port `53`, modern DNS deployments increasingly use encrypted transports to provide confidentiality and integrity. These secure protocols include DNSCrypt {{!I-D.denis-dprive-dnscrypt}}, DNS-over-TLS (DoT) {{RFC7858}}, DNS-over-HTTPS (DoH) {{RFC8484}}, DNS-over-QUIC (DoQ) {{RFC9250}}, and Oblivious DNS-over-HTTPS {{RFC9230}}.
+The Domain Name System (DNS) has evolved significantly from its original design as specified in {{RFC1035}}. While traditional DNS operates over unencrypted UDP and TCP connections on port `53`, modern DNS deployments increasingly use encrypted transports to provide confidentiality and integrity. These secure protocols include DNSCrypt {{!I-D.denis-dprive-dnscrypt}}, DNS-over-TLS (DoT) {{RFC7858}}, DNS-over-HTTPS (DoH) {{RFC8484}}, DNS-over-QUIC (DoQ) {{RFC9250}}, and Oblivious DNS-over-HTTPS (ODoH) {{RFC9230}}.
 
 Each secure DNS protocol requires different configuration parameters. DNSCrypt needs a provider public key and provider name in addition to server addresses. DoH requires HTTPS endpoints and paths. DoT and DoQ need TLS configuration including certificate validation parameters. This diversity in configuration requirements creates significant challenges for both users and applications attempting to configure secure DNS resolvers.
 
@@ -84,13 +87,13 @@ The following encoding primitives are used throughout this specification:
 : A single byte (unsigned 8-bit integer) representing the length of `x` in bytes, where `x` is a byte sequence of maximum length 255.
 
 `vlen(x)`
-: Variable length encoding. Equal to `len(x)` if `x` is the last element of a set. Otherwise equal to `(0x80 | len(x))`, indicating more elements follow.
+: Variable length encoding. Equal to `len(x)` if `x` is the last element of a set. Otherwise equal to `(0x80 | len(x))`, indicating more elements follow. Each element MUST be at most 127 bytes long because the high bit of the length byte is reserved for the continuation flag.
 
 `LP(x)`
 : Length-prefixed encoding, defined as `len(x) ‖ x`.
 
 `VLP(x1, x2, ...xn)`
-: Variable-length-prefixed set encoding, defined as `vlen(x1) ‖ x1 ‖ vlen(x2) ‖ x2 ... ‖ vlen(xn) ‖ xn`. For a single-element set, `VLP(x) == LP(x)`.
+: Variable-length-prefixed set encoding, defined as `vlen(x1) ‖ x1 ‖ vlen(x2) ‖ x2 ... ‖ vlen(xn) ‖ xn`. For a single-element set, `VLP(x) == LP(x)`. An empty set is encoded as the single byte `0x00`. An omitted optional VLP field contributes no bytes.
 
 `[x]`
 : Denotes that `x` is optional and may be omitted.
@@ -116,7 +119,7 @@ The stamp begins with the scheme `sdns://` followed by a base64url-encoded paylo
 
 The general structure of the payload is:
 
-~~~
+~~~ pseudocode
 protocol_identifier ‖ protocol_specific_data
 ~~~
 
@@ -136,6 +139,7 @@ The following protocol identifiers are defined:
 | 0x05  | Oblivious DoH Target      | Target server for Oblivious DoH  |
 | 0x81  | Anonymized DNSCrypt Relay | Relay for DNSCrypt anonymization |
 | 0x85  | Oblivious DoH Relay       | Relay for Oblivious DoH          |
+{: title="DNS Stamp Protocol Identifiers"}
 
 Protocol identifiers in the range 0x80-0xFF are reserved for relay/proxy protocols that forward queries to other servers.
 
@@ -149,6 +153,7 @@ Several stamp types include a properties field, which is a 64-bit little-endian 
 | 1    | No Logs   | The server does not keep query logs         |
 | 2    | No Filter | The server does not filter or block domains |
 | 3-63 | Reserved  | Must be set to zero                         |
+{: title="DNS Stamp Properties"}
 
 When encoding, undefined property bits MUST be set to zero. When decoding, undefined property bits MUST be ignored to allow future extensions.
 
@@ -162,7 +167,7 @@ Plain DNS stamps encode parameters for traditional unencrypted DNS resolvers.
 
 ### Format
 
-~~~
+~~~ pseudocode
 payload = 0x00 ‖ props ‖ LP(addr)
 ~~~
 
@@ -188,7 +193,7 @@ DNSCrypt stamps encode parameters for DNSCrypt servers.
 
 ### Format
 
-~~~
+~~~ pseudocode
 payload = 0x01 ‖ props ‖ LP(addr) ‖ LP(pk) ‖ LP(provider_name)
 ~~~
 
@@ -221,7 +226,7 @@ DoH stamps encode parameters for DNS-over-HTTPS servers.
 
 ### Format
 
-~~~
+~~~ pseudocode
 payload = 0x02 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
           LP(hostname) ‖ LP(path) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 ~~~
@@ -262,7 +267,7 @@ DoT stamps encode parameters for DNS-over-TLS servers.
 
 ### Format
 
-~~~
+~~~ pseudocode
 payload = 0x03 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
           LP(hostname) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 ~~~
@@ -283,7 +288,7 @@ DoQ stamps encode parameters for DNS-over-QUIC servers.
 
 ### Format
 
-~~~
+~~~ pseudocode
 payload = 0x04 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
           LP(hostname) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 ~~~
@@ -301,7 +306,7 @@ ODoH target stamps encode parameters for Oblivious DoH target servers.
 
 ### Format
 
-~~~
+~~~ pseudocode
 payload = 0x05 ‖ props ‖ LP(hostname) ‖ LP(path)
 ~~~
 
@@ -325,7 +330,7 @@ DNSCrypt relay stamps encode parameters for anonymization relays.
 
 ### Format
 
-~~~
+~~~ pseudocode
 payload = 0x81 ‖ LP(addr)
 ~~~
 
@@ -343,7 +348,7 @@ ODoH relay stamps encode parameters for Oblivious DoH relays.
 
 ### Format
 
-~~~
+~~~ pseudocode
 payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
           LP(hostname) ‖ LP(path) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 ~~~
@@ -466,7 +471,7 @@ Implementations MUST:
 - Verify at least one certificate in the chain matches a provided hash
 - Follow standard certificate validation per {{RFC5280}}
 - Check certificate validity periods and signatures
-- Verify the certificate matches the specified hostname
+- Verify the certificate matches the specified hostname per {{RFC9525}}
 
 ### Operational Considerations
 
