@@ -4,8 +4,8 @@
 
 Network Working Group                                           F. Denis
 Internet-Draft                                    Individual Contributor
-Intended status: Standards Track                             5 July 2026
-Expires: 6 January 2027
+Intended status: Standards Track                       14 September 2026
+Expires: 18 March 2027
 
 
                       The DNS Stamps Specification
@@ -19,7 +19,8 @@ Abstract
    cryptographic keys, and protocol-specific configuration into a single
    string using a standard URI format.  The specification supports
    multiple secure DNS protocols including DNSCrypt, DNS-over-HTTPS
-   (DoH), DNS-over-TLS (DoT), DNS-over-QUIC (DoQ), and Oblivious DoH.
+   (DoH), DNS-over-TLS (DoT), DNS-over-QUIC (DoQ), and Oblivious DNS-
+   over-HTTPS (ODoH).
 
 Discussion Venues
 
@@ -47,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 January 2027.
+   This Internet-Draft will expire on 18 March 2027.
 
 Copyright Notice
 
@@ -159,7 +160,7 @@ Table of Contents
    confidentiality and integrity.  These secure protocols include
    DNSCrypt [I-D.denis-dprive-dnscrypt], DNS-over-TLS (DoT) [RFC7858],
    DNS-over-HTTPS (DoH) [RFC8484], DNS-over-QUIC (DoQ) [RFC9250], and
-   Oblivious DNS-over-HTTPS [RFC9230].
+   Oblivious DNS-over-HTTPS (ODoH) [RFC9230].
 
    Each secure DNS protocol requires different configuration parameters.
    DNSCrypt needs a provider public key and provider name in addition to
@@ -204,9 +205,9 @@ Table of Contents
 
 2.  Conventions and Definitions
 
-   The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”,
-   “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and
-   “OPTIONAL” in this document are to be interpreted as described in
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
@@ -238,13 +239,17 @@ Table of Contents
 
    vlen(x)  Variable length encoding.  Equal to len(x) if x is the last
       element of a set.  Otherwise equal to (0x80 | len(x)), indicating
-      more elements follow.
+      more elements follow.  Each element MUST be at most 127 bytes long
+      because the high bit of the length byte is reserved for the
+      continuation flag.
 
    LP(x)  Length-prefixed encoding, defined as len(x) ‖ x.
 
    VLP(x1, x2, ...xn)  Variable-length-prefixed set encoding, defined as
       vlen(x1) ‖ x1 ‖ vlen(x2) ‖ x2 ... ‖ vlen(xn) ‖ xn.  For a single-
-      element set, VLP(x) == LP(x).
+      element set, VLP(x) == LP(x).  An empty set is encoded as the
+      single byte 0x00.  An omitted optional VLP field contributes no
+      bytes.
 
    [x]  Denotes that x is optional and may be omitted.
 
@@ -302,7 +307,7 @@ Table of Contents
     | 0x85  | Oblivious DoH Relay  | Relay for Oblivious DoH         |
     +-------+----------------------+---------------------------------+
 
-                                 Table 1
+                 Table 1: DNS Stamp Protocol Identifiers
 
    Protocol identifiers in the range 0x80-0xFF are reserved for relay/
    proxy protocols that forward queries to other servers.
@@ -325,7 +330,7 @@ Table of Contents
     | 3-63 | Reserved  | Must be set to zero                         |
     +------+-----------+---------------------------------------------+
 
-                                 Table 2
+                      Table 2: DNS Stamp Properties
 
    When encoding, undefined property bits MUST be set to zero.  When
    decoding, undefined property bits MUST be ignored to allow future
@@ -378,7 +383,7 @@ Table of Contents
    addr  IP address and optional port.  IPv6 addresses MUST be enclosed
       in square brackets.  Default port is 443.
 
-   pk  Provider’s Ed25519 public key (exactly 32 bytes, raw binary
+   pk  Provider's Ed25519 public key (exactly 32 bytes, raw binary
       format).
 
    provider_name  DNSCrypt provider name (e.g., 2.dnscrypt-
@@ -398,8 +403,8 @@ Table of Contents
 
 4.3.1.  Format
 
-payload = 0x02 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
-          LP(hostname) ‖ LP(path) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
+   payload = 0x02 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
+             LP(hostname) ‖ LP(path) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 
 4.3.2.  Fields
 
@@ -426,7 +431,7 @@ payload = 0x02 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 
    *  The hostname MUST NOT be percent-encoded or punycode-encoded.
 
-   *  The path MUST start with “/”.
+   *  The path MUST start with "/".
 
    *  Bootstrap addresses follow the same format as addr.
 
@@ -503,8 +508,8 @@ payload = 0x02 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 
 4.8.1.  Format
 
-payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
-          LP(hostname) ‖ LP(path) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
+   payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
+             LP(hostname) ‖ LP(path) [ ‖ VLP(bootstrap1, ..., bootstrapn) ]
 
 4.8.2.  Fields
 
@@ -672,7 +677,8 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 
    *  Check certificate validity periods and signatures
 
-   *  Verify the certificate matches the specified hostname
+   *  Verify the certificate matches the specified hostname per
+      [RFC9525]
 
 6.2.2.  Operational Considerations
 
@@ -819,8 +825,8 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 
 8.1.  DNS Stamps URI Scheme Registration
 
-   IANA is requested to register the “sdns” URI scheme in the “Uniform
-   Resource Identifier (URI) Schemes” registry:
+   IANA is requested to register the "sdns" URI scheme in the "Uniform
+   Resource Identifier (URI) Schemes" registry:
 
    *  Scheme name: sdns
 
@@ -836,9 +842,9 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
 
    [I-D.denis-dprive-dnscrypt]
               Denis, F., "The DNSCrypt Protocol", Work in Progress,
-              Internet-Draft, draft-denis-dprive-dnscrypt-10, 20 June
+              Internet-Draft, draft-denis-dprive-dnscrypt-11, 23 July
               2026, <https://datatracker.ietf.org/doc/html/draft-denis-
-              dprive-dnscrypt-10>.
+              dprive-dnscrypt-11>.
 
    [RFC1035]  Mockapetris, P., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
@@ -864,13 +870,6 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
               (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
               <https://www.rfc-editor.org/rfc/rfc5280>.
 
-   [RFC6125]  Saint-Andre, P. and J. Hodges, "Representation and
-              Verification of Domain-Based Application Service Identity
-              within Internet Public Key Infrastructure Using X.509
-              (PKIX) Certificates in the Context of Transport Layer
-              Security (TLS)", RFC 6125, DOI 10.17487/RFC6125, March
-              2011, <https://www.rfc-editor.org/rfc/rfc6125>.
-
    [RFC7858]  Hu, Z., Zhu, L., Heidemann, J., Mankin, A., Wessels, D.,
               and P. Hoffman, "Specification for DNS over Transport
               Layer Security (TLS)", RFC 7858, DOI 10.17487/RFC7858, May
@@ -888,6 +887,10 @@ payload = 0x85 ‖ props ‖ LP(addr) ‖ VLP(hash1, ..., hashn) ‖
               Dedicated QUIC Connections", RFC 9250,
               DOI 10.17487/RFC9250, May 2022,
               <https://www.rfc-editor.org/rfc/rfc9250>.
+
+   [RFC9525]  Saint-Andre, P. and R. Salz, "Service Identity in TLS",
+              RFC 9525, DOI 10.17487/RFC9525, November 2023,
+              <https://www.rfc-editor.org/rfc/rfc9525>.
 
 9.2.  Informative References
 
@@ -932,7 +935,7 @@ A.1.  Example 1: Plain DNS
    2.  Properties: 0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00 (bit 0 set,
        little-endian)
 
-   3.  LP(“192.0.2.53”): 0x0A ‖ “192.0.2.53” = 0x0A 0x31 0x39 0x32 0x2E
+   3.  LP("192.0.2.53"): 0x0A ‖ "192.0.2.53" = 0x0A 0x31 0x39 0x32 0x2E
        0x30 0x2E 0x32 0x2E 0x35 0x33
 
    4.  Concatenate: 0x00 0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x0A
@@ -962,11 +965,11 @@ A.2.  Example 2: DNSCrypt
 
    2.  Properties: 0x07 0x00 0x00 0x00 0x00 0x00 0x00 0x00
 
-   3.  LP(“198.51.100.1:5553”): 0x11 ‖ address
+   3.  LP("198.51.100.1:5553"): 0x11 ‖ address
 
    4.  LP(public key): 0x20 ‖ 32 bytes of key
 
-   5.  LP(“2.dnscrypt-cert.example.com”): 0x1B ‖ provider name
+   5.  LP("2.dnscrypt-cert.example.com"): 0x1B ‖ provider name
 
    6.  Concatenate all components
 
@@ -994,14 +997,14 @@ A.3.  Example 3: DNS-over-HTTPS
 
    2.  Properties: 0x02 0x00 0x00 0x00 0x00 0x00 0x00 0x00
 
-   3.  LP(“”): 0x00 (empty address)
+   3.  LP(""): 0x00 (empty address)
 
-   4.  VLP(cert hash): Since it’s the only hash, same as LP: 0x20 ‖ 32
+   4.  VLP(cert hash): Since it's the only hash, same as LP: 0x20 ‖ 32
        bytes
 
-   5.  LP(“dns.example.com”): 0x0F ‖ hostname
+   5.  LP("dns.example.com"): 0x0F ‖ hostname
 
-   6.  LP(“/dns-query”): 0x0A ‖ path
+   6.  LP("/dns-query"): 0x0A ‖ path
 
    7.  No bootstrap IPs
 
