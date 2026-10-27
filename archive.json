@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-10-25T04:09:04.910032+00:00",
+  "timestamp": "2026-10-27T04:31:48.827107+00:00",
   "repo": "DNSCrypt/draft-denis-dns-stamps",
   "labels": [
     {
@@ -49,6 +49,23 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOPQJBE88AAAABZ-n9nQ",
+      "title": "Please provide an interactive command line DNS stamp calculator to run locally",
+      "url": "https://github.com/DNSCrypt/draft-denis-dns-stamps/issues/1",
+      "state": "OPEN",
+      "author": "ell1e",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I would like to suggest to provide an interactive command line DNS stamp calculator to run locally, so that people can download it and review the code and use that locally. Ideally, using some language that doesn't need too many dependencies, e.g. C.\n\nCurrently, both an online calculator and a listing of stamps can be on dnscrypt.info, which means if that site is ever even briefly taken over by hackers, immediately the configs of a bunch of people could be affected. This would be different with an offline command line tool that will often pass more review before it's shipped e.g. by Linux and BSD systems, especially whenever a new update comes in.\n\nIt would also be nice if such an interactive tool could specifically print out the DNS fingerprint of a stamp, in the ways where it matches what is commonly shown by OpenSSL or web browsers when looking at a cert. This would give users an easier  ability  to check if a stamp actually matches any specific cert as expeted.",
+      "createdAt": "2026-10-26T11:01:00Z",
+      "updatedAt": "2026-10-26T11:01:50Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": []
 }
